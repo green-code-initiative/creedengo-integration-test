@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.green-code-initiative</groupId>
+    <artifactId>creedengo-integration-test</artifactId>
+    <version>${revision}</version>
+
+    <name>creedengo integration testing repository</name>
+    <description>Repository that contains integration testing framework for creedengo plugins.</description>
+    <url>https://github.com/green-code-initiative/creedengo-integration-test</url>
+
+    <inceptionYear>2025</inceptionYear>
+    <organization>
+        <name>green-code-initiative</name>
+        <url>https://github.com/green-code-initiative</url>
+    </organization>
+    <licenses>
+        <license>
+            <name>GPL v3</name>
+            <url>https://www.gnu.org/licenses/gpl-3.0.en.html</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Gilles GROUSSET</name>
+            <email>zippy1978@users.noreply.github.com</email>
+            <organization>green-code-initiative</organization>
+            <organizationUrl>https://github.com/green-code-initiative</organizationUrl>
+        </developer>
+        <developer>
+            <name>Maxime MALGORN</name>
+            <email>utarwyn@users.noreply.github.com</email>
+            <organization>green-code-initiative</organization>
+            <organizationUrl>https://github.com/green-code-initiative</organizationUrl>
+        </developer>
+        <developer>
+            <name>Geoffrey LALLOUÉ</name>
+            <email>glalloue@users.noreply.github.com</email>
+            <organization>green-code-initiative</organization>
+            <organizationUrl>https://github.com/green-code-initiative</organizationUrl>
+        </developer>
+        <developer>
+            <name>David DE CARVALHO</name>
+            <email>dedece35@users.noreply.github.com</email>
+            <organization>green-code-initiative</organization>
+            <organizationUrl>https://github.com/green-code-initiative</organizationUrl>
+        </developer>
+        <developer>
+            <name>Olivier LE GOAËR</name>
+            <email>olegoaer@users.noreply.github.com</email>
+            <organization>green-code-initiative</organization>
+            <organizationUrl>https://github.com/green-code-initiative</organizationUrl>
+        </developer>
+        <developer>
+            <name>Julien HERTOUT</name>
+            <email>jhertout@users.noreply.github.com</email>
+            <organization>green-code-initiative</organization>
+            <organizationUrl>https://github.com/green-code-initiative</organizationUrl>
+        </developer>
+        <developer>
+            <name>Jules DELECOUR</name>
+            <email>jules-delecour-dav@users.noreply.github.com</email>
+            <organization>green-code-initiative</organization>
+            <organizationUrl>https://github.com/green-code-initiative</organizationUrl>
+        </developer>
+        <developer>
+            <name>Maxime DUBOIS</name>
+            <email>mdubois81@users.noreply.github.com</email>
+            <organization>green-code-initiative</organization>
+            <organizationUrl>https://github.com/green-code-initiative</organizationUrl>
+        </developer>
+        <developer>
+            <name>Vianney DE BELLABRE</name>
+            <email>Djoums@users.noreply.github.com</email>
+            <organization>green-code-initiative</organization>
+            <organizationUrl>https://github.com/green-code-initiative</organizationUrl>
+        </developer>
+        <developer>
+            <name>Jérôme CARDON</name>
+            <email>jay-79@users.noreply.github.com</email>
+            <organization>green-code-initiative</organization>
+            <organizationUrl>https://github.com/green-code-initiative</organizationUrl>
+        </developer>
+        <developer>
+            <name>Justin BERQUE</name>
+            <email>JBerque@users.noreply.github.com</email>
+            <organization>green-code-initiative</organization>
+            <organizationUrl>https://github.com/green-code-initiative</organizationUrl>
+        </developer>
+        <developer>
+            <name>Johanna DUIGOU</name>
+            <email>jduigoudev@users.noreply.github.com</email>
+            <organization>green-code-initiative</organization>
+            <organizationUrl>https://github.com/green-code-initiative</organizationUrl>
+        </developer>
+        <developer>
+            <name>Jean-Yves CRONIER</name>
+            <email>jycr@users.noreply.github.com</email>
+            <organization>green-code-initiative</organization>
+            <organizationUrl>https://github.com/green-code-initiative</organizationUrl>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:https://github.com/green-code-initiative/creedengo-integration-test</connection>
+        <developerConnection>scm:git:https://github.com/green-code-initiative/creedengo-integration-test</developerConnection>
+        <url>https://github.com/green-code-initiative/creedengo-integration-test</url>
+        <tag>HEAD</tag>
+    </scm>
+    <issueManagement>
+        <system>GitHub</system>
+        <url>https://github.com/green-code-initiative/creedengo-integration-test/issues</url>
+    </issueManagement>
+
+    <properties>
+        <!--
+            Default version when disabling Maven `maven-git-versioning-extension` extension
+            cf. https://github.com/qoomon/maven-git-versioning-extension#intellij&#45;&#45;-multi-modules-projects
+        -->
+        <revision>current-SNAPSHOT</revision>
+
+        <!-- Helps ensure build reproducibility (cf. https://maven.apache.org/guides/mini/guide-reproducible-builds.html) -->
+        <!--suppress UnresolvedMavenProperty -->
+        <project.build.outputTimestamp>${git.commit.timestamp.datetime}</project.build.outputTimestamp>
+
+        <java.version>11</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+
+        <encoding>UTF-8</encoding>
+        <project.build.sourceEncoding>${encoding}</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>${encoding}</project.reporting.outputEncoding>
+
+    </properties>
+
+    <dependencies>
+
+        <!-- TEST sources dependencies -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.9.3</version> <!-- >= 5.10 is KO for tests -->
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-suite</artifactId>
+            <version>1.9.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>3.27.3</version>
+        </dependency>
+
+        <!-- Dependencies used by integration tests -->
+        <dependency>
+            <groupId>org.sonarsource.orchestrator</groupId>
+            <artifactId>sonar-orchestrator-junit5</artifactId>
+            <version>5.4.0.2489</version>
+        </dependency>
+        <dependency>
+            <groupId>org.sonarsource.java</groupId>
+            <artifactId>test-classpath-reader</artifactId>
+            <version>8.11.0.38440</version>
+        </dependency>
+        <dependency>
+            <groupId>org.sonarsource.sonarqube</groupId>
+            <artifactId>sonar-ws</artifactId>
+            <version>9.9.7.96285</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.jycr</groupId>
+            <artifactId>java-data-url-handler</artifactId>
+            <version>0.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>2.0.17</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.5.18</version>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.38</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <!-- TO KEEP : to fix sonar plugin version for CICD and execute sonar:sonar on github CI -->
+                <plugin>
+                    <groupId>org.sonarsource.scanner.maven</groupId>
+                    <artifactId>sonar-maven-plugin</artifactId>
+                    <version>5.0.0.4389</version>
+<!--                    <version>5.1.0.4751</version>-->
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <!--
+                Plugin to configure reading sonar-project.properties (via Maven Properties Plugin)
+                because SonarQube Scanner for Maven does not support reading sonar-project.properties
+                -->
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>properties-maven-plugin</artifactId>
+                <version>1.2.1</version>
+                <executions>
+                    <execution>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>read-project-properties</goal>
+                        </goals>
+                        <configuration>
+                            <files>
+                                <file>sonar-project.properties</file>
+                            </files>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>maven-central-publishing</id>
+            <!--
+                For publishing in Maven Central.
+                For more information:
+                - https://central.sonatype.org/publish/publish-guide/#deployment
+                - https://central.sonatype.org/publish/release/#login-into-ossrh
+            -->
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>3.3.1</version>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>3.11.2</version>
+                        <executions>
+                            <execution>
+                                <id>attach-javadoc</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <stylesheet>java</stylesheet>
+                            <doclint>none</doclint>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <!--
+                            For publishing in Maven Central, GPG key must be published to one of following servers:
+                            - keyserver.ubuntu.com
+                            - keys.openpgp.org
+                            - pgp.mit.edu
+
+                            For more informatino: https://central.sonatype.org/publish/requirements/gpg/#distributing-your-public-key
+                        -->
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>3.2.7</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                                <configuration>
+                                    <gpgArguments>
+                                        <arg>--pinentry-mode</arg>
+                                        <arg>loopback</arg>
+                                    </gpgArguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.sonatype.central</groupId>
+                        <artifactId>central-publishing-maven-plugin</artifactId>
+                        <version>0.6.0</version>
+<!--                        <version>0.7.0</version>-->
+                        <extensions>true</extensions>
+                        <configuration>
+                            <publishingServerId>central</publishingServerId>
+                            <tokenAuth>true</tokenAuth>
+                            <autoPublish>true</autoPublish>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>
