@@ -37,3 +37,7 @@ Configuration keys available :
 - **test-it.additional-profile-uris** : string / optional / default : no value - Comma separated JSON profile file URIs to load
 - **test-it.test-projects** : string / mandatory / default : no value - Comma separated paths of "test projects" to analyze. Syntaxe: `sonar.projectKey|sonar.projectName|project.pomUri`
 - **test-it.test-project-profile-by-language** : string / optional / default : no value - Comma separated list of profiles to associate to each "test project". Syntaxe: `language:profileName`
+
+These keys have to be in pom.xml of creedengo plugin project.
+For example, you can use maven profile to modify some key values like port and keepRunning option.
+Please check creedengo-java plugin for a full example.
