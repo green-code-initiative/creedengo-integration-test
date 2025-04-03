@@ -25,6 +25,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Enable debug logging
+        run: echo "GITHUB_ACTIONS_DEBUG=true" >> $GITHUB_ENV
+
+      - name: Verify GPG installation
+        run: gpg --version
+
+      - name: List imported GPG keys
+        run: gpg --list-secret-keys --keyid-format LONG
+
       # Sets up the Java JDK, and also configures the Maven `settings.xml` file to add authentication for the
       # `ossrh` repository using the `OSSRH_USERNAME` and `OSSRH_TOKEN` environment variables.
       - name: Set up Maven Central Repository
