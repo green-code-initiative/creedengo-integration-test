@@ -1,7 +1,5 @@
 package org.greencodeinitiative.creedengo.integration.tests.profile;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -10,6 +8,8 @@ import java.text.MessageFormat;
 import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import static com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES;
 
@@ -111,8 +111,8 @@ public class ProfileBackup {
 		ProfileMetadata profileMetadata = profileMetadata();
 		String language = profileMetadata.getLanguage();
 		List<RuleMetadata> rules = profileMetadata.getRuleKeys().stream()
-		                                          .map(ruleKey -> this.loadRule(language, ruleKey))
-		                                          .collect(Collectors.toList());
+				.map(ruleKey -> this.loadRule(language, ruleKey))
+				.collect(Collectors.toList());
 		StringBuilder output = new StringBuilder();
 		String repositoryKey = "creedengo-" + profileMetadata.getLanguage();
 		rules.forEach(rule -> output.append(
