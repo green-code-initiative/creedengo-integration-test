@@ -12,7 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.sonarqube.ws.Common.RuleType.CODE_SMELL;
 import static org.sonarqube.ws.Common.Severity.MINOR;
 
-class GCIRulesBase extends BuildProjectEngine {
+public class GCIRulesBase extends BuildProjectEngine {
 
     protected static final String[] EXTRACT_FIELDS = new String[]{
             "rule", "message",

@@ -44,7 +44,7 @@ import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 import static org.assertj.core.api.Assertions.assertThat;
 
-abstract class BuildProjectEngine {
+public abstract class BuildProjectEngine {
 
 	private static final System.Logger LOGGER = System.getLogger(BuildProjectEngine.class.getName());
 
