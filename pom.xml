@@ -118,6 +118,9 @@
 
     <properties>
 
+        <sonar.organization>green-code-initiative</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+
         <!--
             Default version when disabling Maven `maven-git-versioning-extension` extension
             cf. https://github.com/qoomon/maven-git-versioning-extension#intellij&#45;&#45;-multi-modules-projects
@@ -200,30 +203,6 @@
                 </plugin>
             </plugins>
         </pluginManagement>
-        <plugins>
-            <plugin>
-                <!--
-                Plugin to configure reading sonar-project.properties (via Maven Properties Plugin)
-                because SonarQube Scanner for Maven does not support reading sonar-project.properties
-                -->
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>properties-maven-plugin</artifactId>
-                <version>1.2.1</version>
-                <executions>
-                    <execution>
-                        <phase>initialize</phase>
-                        <goals>
-                            <goal>read-project-properties</goal>
-                        </goals>
-                        <configuration>
-                            <files>
-                                <file>sonar-project.properties</file>
-                            </files>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
     </build>
 
     <profiles>
