@@ -55,6 +55,10 @@ jobs:
 #          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
 #          restore-keys: ${{ runner.os }}-m2
 
+      # Décommentez cette étape pour activer le débogage
+      - name: Enable debug logging
+        run: echo "ACTIONS_STEP_DEBUG=true" >> $GITHUB_ENV
+
       # Runs the Maven command to publish to the maven central repository.
       # The `MAVEN_CENTRAL_USERNAME` environment variable will be set with the contents of your `MAVEN_CENTRAL_USERNAME` secret,
       # and the `MAVEN_CENTRAL_TOKEN` environment variable will be set with the contents of your `MAVEN_CENTRAL_TOKEN` secret.
