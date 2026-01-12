@@ -75,6 +75,7 @@ public class ProfileBackup {
 
 	private final ObjectMapper mapper;
 	private final URI jsonProfile;
+	private transient ProfileMetadata profileMetadata;
 
 	public ProfileBackup(URI jsonProfile) {
 		this.mapper = new ObjectMapper();
@@ -84,7 +85,13 @@ public class ProfileBackup {
 		this.jsonProfile = jsonProfile;
 	}
 
-	private transient ProfileMetadata profileMetadata;
+	public String language() {
+		return profileMetadata().getLanguage();
+	}
+
+	public String name() {
+		return profileMetadata().getName();
+	}
 
 	private ProfileMetadata profileMetadata() {
 		if (profileMetadata == null) {
@@ -152,12 +159,4 @@ public class ProfileBackup {
 		}
 	}
 
-	public String language() {
-		return profileMetadata().getLanguage();
-	}
-
-
-	public String name() {
-		return profileMetadata().getName();
-	}
 }

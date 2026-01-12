@@ -64,9 +64,9 @@ public class GCIRulesBase extends BuildProjectEngine {
 //		System.out.println("--- NB ISSUES : " + respIssues.getIssuesCount());
 //		System.out.println("--- NB ISSUES_LIST : " + respIssues.getIssuesList().size());
 //        respIssues.getIssuesList().forEach(issue -> {
-////			if (issue.getRule().equals("creedengo-java:GCI27")) {
+//			if (issue.getRule().equals("creedengo-java:GCI27")) {
 //				System.out.println("--- Issue --- " + issue.getRule() + " / " + issue.getLine());
-////			}
+//			}
 //		});
 
 //        List<Issues.Issue> issues = issuesForFile(projectKey, filePath, ruleId);

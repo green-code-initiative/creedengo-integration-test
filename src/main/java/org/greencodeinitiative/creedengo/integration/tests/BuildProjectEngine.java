@@ -24,6 +24,8 @@ import com.sonar.orchestrator.locator.Location;
 import com.sonar.orchestrator.locator.MavenLocation;
 import com.sonar.orchestrator.locator.URLLocation;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.greencodeinitiative.creedengo.integration.tests.profile.ProfileBackup;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -37,28 +39,26 @@ import org.sonarqube.ws.client.components.ShowRequest;
 import org.sonarqube.ws.client.issues.SearchRequest;
 import org.sonarqube.ws.client.measures.ComponentRequest;
 
-import static java.lang.System.Logger.Level.INFO;
 import static java.util.Optional.ofNullable;
 import static java.util.function.Predicate.not;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Slf4j
 public abstract class BuildProjectEngine {
-
-	private static final System.Logger LOGGER = System.getLogger(BuildProjectEngine.class.getName());
 
 	protected static OrchestratorExtension orchestrator;
 	protected static List<ProjectToAnalyze> analyzedProjects;
 
 	@BeforeAll
 	static void setup() {
-		LOGGER.log(
-				INFO,
-				"\n" +
-						"====================================================================================================\n" +
-						"Launching SonarQube server with following JAVA System properties: {0}\n" +
-						"====================================================================================================\n"
+		LOGGER.info(
+				"""
+				====================================================================================================
+				Launching SonarQube server with following JAVA System properties : {}
+				====================================================================================================
+				"""
 				,
 				Stream
 						.of(
@@ -88,18 +88,14 @@ public abstract class BuildProjectEngine {
 	static void tearDown() {
 		if ("true".equalsIgnoreCase(System.getProperty("test-it.sonarqube.keepRunning"))) {
 			try (Scanner in = new Scanner(System.in)) {
-				LOGGER.log(INFO, () ->
-						MessageFormat.format(
-								"\n" +
-										"\n====================================================================================================" +
-										"\nSonarQube available at: {0} (to login: admin/admin)" +
-										"\n====================================================================================================" +
-										"\n",
-								orchestrator.getServer().getUrl()
-						)
+				LOGGER.info(
+						"====================================================================================================" +
+						"SonarQube available at : {} (to login: admin/admin)" +
+						"====================================================================================================",
+						orchestrator.getServer().getUrl()
 				);
 				do {
-					LOGGER.log(INFO, "✍ Please press CTRL+C to stop");
+					LOGGER.info("✍ Please press CTRL+C to stop");
 				}
 				while (!in.nextLine().isEmpty());
 			}
@@ -129,7 +125,7 @@ public abstract class BuildProjectEngine {
 
 		orchestrator = orchestratorExtensionBuilder.build();
 		orchestrator.start();
-		LOGGER.log(INFO, () -> MessageFormat.format("SonarQube server available on: {0}", orchestrator.getServer().getUrl()));
+		LOGGER.info("SonarQube server available on : {}", orchestrator.getServer().getUrl());
 	}
 
 	private static void launchAnalysis() {
@@ -146,7 +142,7 @@ public abstract class BuildProjectEngine {
 				.peek(projectToAnalyze -> projectToAnalyze.associateProjectToQualityProfile(server, qualityProfileByLanguage))
 				.map(ProjectToAnalyze::createMavenBuild)
 				// - Run SonarQube Scanner on test project
-				.peek(p -> LOGGER.log(INFO, () -> MessageFormat.format("Running SonarQube Scanner on project: {0}", p.getPom())))
+				.peek(p -> LOGGER.info("Running SonarQube Scanner on project: {}", p.getPom()))
 				.forEach(orchestrator::executeBuild);
 	}
 

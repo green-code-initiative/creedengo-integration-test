@@ -128,19 +128,26 @@
         <!--suppress UnresolvedMavenProperty -->
         <project.build.outputTimestamp>${git.commit.timestamp.datetime}</project.build.outputTimestamp>
 
-        <java.version>11</java.version>
+        <java.version>17</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <!-- to prevent message: system modules path not set in conjunction with -source 11 -->
         <maven.compiler.release>${java.version}</maven.compiler.release>
 
-        <encoding>UTF-8</encoding>
-        <project.build.sourceEncoding>${encoding}</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>${encoding}</project.reporting.outputEncoding>
+<!--        <encoding>UTF-8</encoding>-->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <!-- URL of the Maven repository where sonarqube will be downloaded -->
         <test-it.orchestrator.artifactory.url>https://repo1.maven.org/maven2</test-it.orchestrator.artifactory.url>
-        <test-it.sonarqube.version>25.12.0.117093</test-it.sonarqube.version>
+        <test-it.sonarqube.version>26.1.0.118079</test-it.sonarqube.version>
+
+        <assertj.version>3.27.3</assertj.version>
+        <orchestrator.version>5.6.2.2625</orchestrator.version>
+        <logback.version>1.5.24</logback.version>
+        <lombok.version>1.18.42</lombok.version>
+        <data-url-handler.version>0.0.1</data-url-handler.version>
+
 
     </properties>
 
@@ -149,14 +156,14 @@
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
-            <version>3.27.3</version>
+            <version>${assertj.version}</version>
         </dependency>
 
         <!-- Dependencies used by integration tests -->
         <dependency>
             <groupId>org.sonarsource.orchestrator</groupId>
             <artifactId>sonar-orchestrator-junit5</artifactId>
-            <version>5.6.2.2625</version>
+            <version>${orchestrator.version}</version>
         </dependency>
         <dependency>
             <groupId>org.sonarsource.sonarqube</groupId>
@@ -166,27 +173,18 @@
         <dependency>
             <groupId>io.github.jycr</groupId>
             <artifactId>java-data-url-handler</artifactId>
-            <version>0.0.1</version>
+            <version>${data-url-handler.version}</version>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>org.slf4j</groupId>-->
-<!--            <artifactId>slf4j-api</artifactId>-->
-<!--            <version>2.0.17</version>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>org.sonarsource.java</groupId>-->
-<!--            <artifactId>test-classpath-reader</artifactId>-->
-<!--            <version>8.11.0.38440</version>-->
-<!--        </dependency>-->
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.5.18</version>
+            <version>${logback.version}</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.40</version>
+            <version>${lombok.version}</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
@@ -303,88 +301,15 @@
                     <plugin>
                         <groupId>org.sonatype.central</groupId>
                         <artifactId>central-publishing-maven-plugin</artifactId>
-<!--                        <version>0.6.0</version>-->
                         <version>0.7.0</version>
                         <extensions>true</extensions>
                         <configuration>
                             <publishingServerId>central</publishingServerId>
-<!--                            <tokenAuth>true</tokenAuth>-->
-                            <autoPublish>true</autoPublish>
+                            <tokenAuth>true</tokenAuth>
                         </configuration>
                     </plugin>
                 </plugins>
             </build>
         </profile>
-<!--        <profile>-->
-<!--            <id>dede</id>-->
-<!--            <build>-->
-<!--                <plugins>-->
-<!--                    <plugin>-->
-<!--                        <groupId>org.apache.maven.plugins</groupId>-->
-<!--                        <artifactId>maven-source-plugin</artifactId>-->
-<!--                        <version>3.3.1</version>-->
-<!--                        <executions>-->
-<!--                            <execution>-->
-<!--                                <id>attach-sources</id>-->
-<!--                                &lt;!&ndash; <phase>verify</phase> &ndash;&gt;-->
-<!--                                <phase>package</phase>-->
-<!--                                <goals>-->
-<!--                                    <goal>jar-no-fork</goal>-->
-<!--                                </goals>-->
-<!--                            </execution>-->
-<!--                        </executions>-->
-<!--                    </plugin>-->
-<!--                    <plugin>-->
-<!--                        <groupId>org.apache.maven.plugins</groupId>-->
-<!--                        <artifactId>maven-javadoc-plugin</artifactId>-->
-<!--                        <version>3.11.2</version>-->
-<!--                        <executions>-->
-<!--                            <execution>-->
-<!--                                <id>attach-javadoc</id>-->
-<!--                                <phase>package</phase>-->
-<!--                                <goals>-->
-<!--                                    <goal>jar</goal>-->
-<!--                                </goals>-->
-<!--                            </execution>-->
-<!--                        </executions>-->
-<!--                        <configuration>-->
-<!--                            <stylesheet>java</stylesheet>-->
-<!--                            <doclint>none</doclint>-->
-<!--                        </configuration>-->
-<!--                    </plugin>-->
-<!--                    <plugin>-->
-<!--                        <groupId>org.apache.maven.plugins</groupId>-->
-<!--                        <artifactId>maven-gpg-plugin</artifactId>-->
-<!--                        <version>3.2.7</version>-->
-<!--                        <configuration>-->
-<!--                            <gpgArguments>-->
-<!--                                <arg>&#45;&#45;pinentry-mode</arg>-->
-<!--                                <arg>loopback</arg>-->
-<!--                            </gpgArguments>-->
-<!--                        </configuration>-->
-<!--                        <executions>-->
-<!--                            <execution>-->
-<!--                                <id>sign-artifacts</id>-->
-<!--                                &lt;!&ndash; <phase>verify</phase> &ndash;&gt;-->
-<!--                                <phase>package</phase>-->
-<!--                                <goals>-->
-<!--                                    <goal>sign</goal>-->
-<!--                                </goals>-->
-<!--                            </execution>-->
-<!--                        </executions>-->
-<!--                    </plugin>-->
-<!--                    <plugin>-->
-<!--                        <groupId>org.sonatype.central</groupId>-->
-<!--                        <artifactId>central-publishing-maven-plugin</artifactId>-->
-<!--                        <version>0.7.0</version>-->
-<!--                        <extensions>true</extensions>-->
-<!--                        <configuration>-->
-<!--                            <publishingServerId>central</publishingServerId>-->
-<!--                            <autoPublish>true</autoPublish>-->
-<!--                        </configuration>-->
-<!--                    </plugin>-->
-<!--                </plugins>-->
-<!--            </build>-->
-<!--        </profile>-->
     </profiles>
 </project>
