@@ -10,7 +10,7 @@ It will be used inside Creedengo plugins to check Integration tests.
 
 | Component Version | Java version |
 |-------------------|--------------|
-| 0.1.+             | 11 / 17      |
+| 0.+               | 11 / 17      |
 
 
 🚀 What does this component do ?

@@ -137,7 +137,6 @@
         <!-- to prevent message: system modules path not set in conjunction with -source 11 -->
         <maven.compiler.release>${java.version}</maven.compiler.release>
 
-<!--        <encoding>UTF-8</encoding>-->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
