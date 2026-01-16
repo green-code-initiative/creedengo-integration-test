@@ -26,15 +26,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-#      - name: Enable debug logging
-#        run: echo "GITHUB_ACTIONS_DEBUG=true" >> $GITHUB_ENV
-#
-#      - name: Verify GPG installation
-#        run: gpg --version
-#
-#      - name: List imported GPG keys
-#        run: gpg --list-secret-keys --keyid-format LONG
-
       # Sets up the Java JDK, and also configures the Maven `settings.xml` file to add authentication for the
       # `ossrh` repository using the `OSSRH_USERNAME` and `OSSRH_TOKEN` environment variables.
       - name: Set up Maven Central Repository
@@ -42,18 +33,12 @@ jobs:
         with:
           java-version: '17'
           distribution: 'adopt'
+          cache: maven # enable maven cache shared by all github actions build
           server-id: 'central' # must match the serverId configured for the central-publishing-maven-plugin in `pom.xml`
           server-username: MAVEN_USERNAME
           server-password: MAVEN_PASSWORD
           gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }} # Substituted with the value stored in the referenced secret
           gpg-passphrase: MAVEN_GPG_PASSPHRASE # Env var that holds the key's passphrase
-
-#      - name: Cache Maven packages
-#        uses: actions/cache@v1
-#        with:
-#          path: ~/.m2
-#          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-#          restore-keys: ${{ runner.os }}-m2
 
       # Décommentez cette étape pour activer le débogage
       - name: Enable debug logging
