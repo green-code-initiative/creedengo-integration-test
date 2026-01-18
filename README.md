@@ -23,9 +23,9 @@ It will be used inside Creedengo plugins to check Integration tests.
 - Enable the check of the analysis result : each Integration test must call one of check methods available in this component
 - Stop the SonarQube instance
 
-- An option ("test-it.sonarqube.keepRunning" to "true") is available to keep the SonarQube instance running during the test execution. This is useful for debugging purposes. WARNGIN : in this case, IT tests aren't launched.
+- An option ("test-it.sonarqube.keepRunning" to "true") is available to keep the SonarQube instance running during the test execution. This is useful for debugging purposes. WARNING : in this case, IT tests aren't launched.
 
-🧩 Configration keys used by this component ?
+🧩 Configuration keys used by this component ?
 ------------------
 
 Configuration keys available :
@@ -134,7 +134,7 @@ public class MyPluginIT extends GCIRulesBase {
         // the rule message to check
         String ruleMsg = "Use a switch statement instead of multiple if-else if possible";
         
-        // These twe arrays must have the same length
+        // These two arrays must have the same length
         // the startLines array contains the line numbers where issues are expected to be found
         // the endLines array contains the line numbers where issues are expected to end
         int[] startLines = new int[]{213, 232, 234, 260, 277, 298, 300, 319, 323, 325, 345, 351, 377, 396, 398, 399, 401, 423, 444, 446};
