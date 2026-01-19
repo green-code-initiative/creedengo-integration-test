@@ -23,6 +23,8 @@ public class GCIRulesBase extends BuildProjectEngine {
 //            "debt",
             "effort"
     };
+
+    protected static final Common.Severity SEVERITY_INFO = Common.Severity.INFO;
     protected static final Common.Severity SEVERITY_MINOR = Common.Severity.MINOR;
     protected static final Common.Severity SEVERITY_MAJOR = Common.Severity.MAJOR;
     protected static final Common.Severity SEVERITY = SEVERITY_MINOR;
@@ -34,7 +36,7 @@ public class GCIRulesBase extends BuildProjectEngine {
     protected static final String EFFORT_15MIN = "15min";
     protected static final String EFFORT_20MIN = "20min";
     protected static final String EFFORT_50MIN = "50min";
-    protected static final String EFFORT_1h = "1h";
+    protected static final String EFFORT_1H = "1h";
 
     protected void checkIssuesForFile(String filePath, String ruleId, String ruleMsg, int[] startLines, int[] endLines) {
         checkIssuesForFile(filePath, ruleId, ruleMsg, startLines, endLines, SEVERITY, TYPE, EFFORT_5MIN);
