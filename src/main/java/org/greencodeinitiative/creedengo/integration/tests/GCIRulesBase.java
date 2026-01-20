@@ -10,7 +10,6 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.sonarqube.ws.Common.RuleType.CODE_SMELL;
-import static org.sonarqube.ws.Common.Severity.MINOR;
 
 public class GCIRulesBase extends BuildProjectEngine {
 

@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- upgrade internal libraries
+- upgrade internal system / clean
+- add some constants for tests
+
 ### Deleted
 
 ## [0.2.1] - 2026-01-13

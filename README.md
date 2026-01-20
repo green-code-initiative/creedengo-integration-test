@@ -12,7 +12,6 @@ It will be used inside Creedengo plugins to check Integration tests.
 |-------------------|--------------|
 | 0.+               | 17           |
 
-
 🚀 What does this component do ?
 ------------------
 
