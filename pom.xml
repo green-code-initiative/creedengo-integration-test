@@ -26,12 +26,6 @@
 
     <developers>
         <developer>
-            <name>Gilles GROUSSET</name>
-            <email>zippy1978@users.noreply.github.com</email>
-            <organization>green-code-initiative</organization>
-            <organizationUrl>https://github.com/green-code-initiative</organizationUrl>
-        </developer>
-        <developer>
             <name>Maxime MALGORN</name>
             <email>utarwyn@users.noreply.github.com</email>
             <organization>green-code-initiative</organization>
@@ -52,36 +46,6 @@
         <developer>
             <name>Olivier LE GOAËR</name>
             <email>olegoaer@users.noreply.github.com</email>
-            <organization>green-code-initiative</organization>
-            <organizationUrl>https://github.com/green-code-initiative</organizationUrl>
-        </developer>
-        <developer>
-            <name>Julien HERTOUT</name>
-            <email>jhertout@users.noreply.github.com</email>
-            <organization>green-code-initiative</organization>
-            <organizationUrl>https://github.com/green-code-initiative</organizationUrl>
-        </developer>
-        <developer>
-            <name>Jules DELECOUR</name>
-            <email>jules-delecour-dav@users.noreply.github.com</email>
-            <organization>green-code-initiative</organization>
-            <organizationUrl>https://github.com/green-code-initiative</organizationUrl>
-        </developer>
-        <developer>
-            <name>Vianney DE BELLABRE</name>
-            <email>Djoums@users.noreply.github.com</email>
-            <organization>green-code-initiative</organization>
-            <organizationUrl>https://github.com/green-code-initiative</organizationUrl>
-        </developer>
-        <developer>
-            <name>Jérôme CARDON</name>
-            <email>jay-79@users.noreply.github.com</email>
-            <organization>green-code-initiative</organization>
-            <organizationUrl>https://github.com/green-code-initiative</organizationUrl>
-        </developer>
-        <developer>
-            <name>Johanna DUIGOU</name>
-            <email>jduigoudev@users.noreply.github.com</email>
             <organization>green-code-initiative</organization>
             <organizationUrl>https://github.com/green-code-initiative</organizationUrl>
         </developer>
