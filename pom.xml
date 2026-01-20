@@ -133,7 +133,7 @@
         <test-it.sonarqube.version>26.1.0.118079</test-it.sonarqube.version>
 
         <assertj.version>3.27.6</assertj.version>
-        <orchestrator.version>5.6.2.2625</orchestrator.version>
+        <orchestrator.version>6.1.0.3962</orchestrator.version>
         <logback.version>1.5.24</logback.version>
         <lombok.version>1.18.42</lombok.version>
         <data-url-handler.version>0.0.1</data-url-handler.version>
