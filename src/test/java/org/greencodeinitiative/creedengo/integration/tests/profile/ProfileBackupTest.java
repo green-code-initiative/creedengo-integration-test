@@ -31,11 +31,7 @@ class ProfileBackupTest {
      */
     private URI createProfileJson(String name, String language, List<String> ruleKeys) throws IOException {
         String json = new ObjectMapper().writeValueAsString(
-            new ProfileMetadata() {{
-                setName(name);
-                setLanguage(language);
-                setRuleKeys(ruleKeys);
-            }}
+            new ProfileMetadata(name, language, ruleKeys)
         );
         Path jsonFile = tempDir.resolve("profile.json");
         Files.writeString(jsonFile, json, StandardCharsets.UTF_8);
