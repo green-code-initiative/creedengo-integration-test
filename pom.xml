@@ -98,7 +98,7 @@
 
         <assertj.version>3.27.7</assertj.version>
         <orchestrator.version>6.1.0.3962</orchestrator.version>
-        <logback.version>1.5.31</logback.version>
+        <logback.version>1.5.32</logback.version>
         <lombok.version>1.18.42</lombok.version>
         <data-url-handler.version>0.0.1</data-url-handler.version>
 
