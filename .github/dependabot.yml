@@ -9,6 +9,3 @@ updates:
     directory: "/" # Location of package manifests
     schedule:
       interval: "weekly"
-    ignore:
-      # Ignore all versions : cf pom.xml comments
-      - dependency-name: "org.sonarsource.orchestrator:sonar-orchestrator-junit5"
