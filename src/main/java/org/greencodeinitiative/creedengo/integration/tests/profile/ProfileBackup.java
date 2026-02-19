@@ -54,23 +54,25 @@ import static com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKN
  */
 public class ProfileBackup {
 	private static final MessageFormat TEMPLATE_PROFIL = new MessageFormat(
-			"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
-					"<profile>\n" +
-					"    <name>{0}</name>\n" +
-					"    <language>{1}</language>\n" +
-					"    <rules>\n" +
-					"    {2}\n" +
-					"    </rules>\n" +
-					"</profile>\n"
+			"""
+<?xml version="1.0" encoding="UTF-8"?>
+<profile>
+	<name>{0}</name>
+	<language>{1}</language>
+	<rules>{2}</rules>
+</profile>
+					"""
 	);
 	private static final MessageFormat TEMPLATE_RULE = new MessageFormat(
-			"<rule>\n" +
-					"    <repositoryKey>{0}</repositoryKey>\n" +
-					"    <key>{1}</key>\n" +
-					"    <type>{2}</type>\n" +
-					"    <priority>{3}</priority>\n" +
-					"    <parameters />\n" +
-					"</rule>\n"
+			"""
+<rule>
+	<repositoryKey>{0}</repositoryKey>
+	<key>{1}</key>
+	<type>{2}</type>
+	<priority>{3}</priority>
+	<parameters />
+</rule>
+					"""
 	);
 
 	private final ObjectMapper mapper;

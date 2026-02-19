@@ -6,7 +6,7 @@
     <artifactId>creedengo-integration-test</artifactId>
     <version>${revision}</version>
 
-    <name>creedengo integration testing repository</name>
+    <name>creedengo integration test</name>
     <description>Repository that contains integration testing framework for creedengo plugins.</description>
     <url>https://github.com/green-code-initiative/creedengo-integration-test</url>
 
