@@ -1,14 +1,11 @@
 package org.greencodeinitiative.creedengo.integration.tests.profile;
 
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
-@Data
-public class ProfileMetadata {
-
-	private String name;
-	private String language;
-	private List<String> ruleKeys;
-
-}
+public record ProfileMetadata(
+		@JsonProperty("name")     String name,
+		@JsonProperty("language") String language,
+		@JsonProperty("ruleKeys") List<String> ruleKeys
+) {}

@@ -2,211 +2,180 @@ package org.greencodeinitiative.creedengo.integration.tests.profile;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class RuleMetadataTest {
 
     // -----------------------------------------------------------------------
-    // Getters / Setters (générés par Lombok @Data)
+    // Constructeur canonique et accesseurs du record
     // -----------------------------------------------------------------------
 
     @Test
-    void testGettersAndSetters() {
-        RuleMetadata rule = new RuleMetadata();
-        rule.setKey("GCI1");
-        rule.setType("CODE_SMELL");
-        rule.setDefaultSeverity("MINOR");
-
-        assertEquals("GCI1",       rule.getKey());
-        assertEquals("CODE_SMELL", rule.getType());
-        assertEquals("MINOR",      rule.getDefaultSeverity());
+    void testConstructorAndAccessors() {
+        RuleMetadata rule = new RuleMetadata("GCI1", "CODE_SMELL", "MINOR");
+        assertEquals("GCI1",       rule.key());
+        assertEquals("CODE_SMELL", rule.type());
+        assertEquals("MINOR",      rule.defaultSeverity());
     }
 
     @Test
-    void testDefaultConstructorProducesNullFields() {
-        RuleMetadata rule = new RuleMetadata();
-        assertNull(rule.getKey());
-        assertNull(rule.getType());
-        assertNull(rule.getDefaultSeverity());
+    void testConstructorWithNullKey() {
+        RuleMetadata rule = new RuleMetadata(null, "CODE_SMELL", "MINOR");
+        assertNull(rule.key());
     }
 
     @Test
-    void testSetKeyNull() {
-        RuleMetadata rule = new RuleMetadata();
-        rule.setKey(null);
-        assertNull(rule.getKey());
+    void testConstructorWithNullType() {
+        RuleMetadata rule = new RuleMetadata("GCI1", null, "MINOR");
+        assertNull(rule.type());
     }
 
     @Test
-    void testSetTypeNull() {
-        RuleMetadata rule = new RuleMetadata();
-        rule.setType(null);
-        assertNull(rule.getType());
+    void testConstructorWithNullSeverity() {
+        RuleMetadata rule = new RuleMetadata("GCI1", "CODE_SMELL", null);
+        assertNull(rule.defaultSeverity());
     }
 
     @Test
-    void testSetDefaultSeverityNull() {
-        RuleMetadata rule = new RuleMetadata();
-        rule.setDefaultSeverity(null);
-        assertNull(rule.getDefaultSeverity());
+    void testConstructorAllNulls() {
+        RuleMetadata rule = new RuleMetadata(null, null, null);
+        assertNull(rule.key());
+        assertNull(rule.type());
+        assertNull(rule.defaultSeverity());
     }
 
     @Test
-    void testSetAllSeverityValues() {
-        RuleMetadata rule = new RuleMetadata();
+    void testAllSeverityValues() {
         for (String severity : new String[]{"INFO", "MINOR", "MAJOR", "CRITICAL", "BLOCKER"}) {
-            rule.setDefaultSeverity(severity);
-            assertEquals(severity, rule.getDefaultSeverity());
+            RuleMetadata rule = new RuleMetadata("GCI1", "CODE_SMELL", severity);
+            assertEquals(severity, rule.defaultSeverity());
         }
     }
 
     @Test
-    void testSetAllTypeValues() {
-        RuleMetadata rule = new RuleMetadata();
+    void testAllTypeValues() {
         for (String type : new String[]{"CODE_SMELL", "BUG", "VULNERABILITY", "SECURITY_HOTSPOT"}) {
-            rule.setType(type);
-            assertEquals(type, rule.getType());
+            RuleMetadata rule = new RuleMetadata("GCI1", type, "MINOR");
+            assertEquals(type, rule.type());
         }
     }
 
     // -----------------------------------------------------------------------
-    // equals & hashCode (générés par Lombok @Data)
+    // equals & hashCode — générés nativement par le record
     // -----------------------------------------------------------------------
 
     @Test
     void testEqualsSameValues() {
-        RuleMetadata a = new RuleMetadata();
-        a.setKey("GCI1");
-        a.setType("CODE_SMELL");
-        a.setDefaultSeverity("MINOR");
-
-        RuleMetadata b = new RuleMetadata();
-        b.setKey("GCI1");
-        b.setType("CODE_SMELL");
-        b.setDefaultSeverity("MINOR");
-
+        RuleMetadata a = new RuleMetadata("GCI1", "CODE_SMELL", "MINOR");
+        RuleMetadata b = new RuleMetadata("GCI1", "CODE_SMELL", "MINOR");
         assertEquals(a, b);
         assertEquals(a.hashCode(), b.hashCode());
     }
 
     @Test
     void testEqualsDifferentKey() {
-        RuleMetadata a = new RuleMetadata();
-        a.setKey("GCI1");
-
-        RuleMetadata b = new RuleMetadata();
-        b.setKey("GCI2");
-
+        RuleMetadata a = new RuleMetadata("GCI1", "CODE_SMELL", "MINOR");
+        RuleMetadata b = new RuleMetadata("GCI2", "CODE_SMELL", "MINOR");
         assertNotEquals(a, b);
     }
 
     @Test
     void testEqualsDifferentType() {
-        RuleMetadata a = new RuleMetadata();
-        a.setKey("GCI1");
-        a.setType("CODE_SMELL");
-
-        RuleMetadata b = new RuleMetadata();
-        b.setKey("GCI1");
-        b.setType("BUG");
-
+        RuleMetadata a = new RuleMetadata("GCI1", "CODE_SMELL", "MINOR");
+        RuleMetadata b = new RuleMetadata("GCI1", "BUG",        "MINOR");
         assertNotEquals(a, b);
     }
 
     @Test
     void testEqualsDifferentSeverity() {
-        RuleMetadata a = new RuleMetadata();
-        a.setKey("GCI1");
-        a.setDefaultSeverity("MINOR");
-
-        RuleMetadata b = new RuleMetadata();
-        b.setKey("GCI1");
-        b.setDefaultSeverity("MAJOR");
-
+        RuleMetadata a = new RuleMetadata("GCI1", "CODE_SMELL", "MINOR");
+        RuleMetadata b = new RuleMetadata("GCI1", "CODE_SMELL", "MAJOR");
         assertNotEquals(a, b);
     }
 
     @Test
     void testEqualsWithNull() {
-        RuleMetadata a = new RuleMetadata();
+        RuleMetadata a = new RuleMetadata("GCI1", "CODE_SMELL", "MINOR");
         assertNotEquals(null, a);
     }
 
     @Test
-    void testEqualsWithDifferentType() {
-        RuleMetadata a = new RuleMetadata();
+    void testEqualsWithDifferentObject() {
+        RuleMetadata a = new RuleMetadata("GCI1", "CODE_SMELL", "MINOR");
         assertNotEquals("a string", a);
     }
 
     @Test
-    void testEqualsSelf() {
-        RuleMetadata a = new RuleMetadata();
-        a.setKey("GCI1");
-        // Réflexivité : un objet est égal à lui-même
-        assertTrue(a.equals(a));
+    void testEqualsAndHashCodeContract() {
+        RuleMetadata a = new RuleMetadata("GCI1", "CODE_SMELL", "MINOR");
+        RuleMetadata b = new RuleMetadata("GCI1", "CODE_SMELL", "MINOR");
+        assertEquals(a, b);
+        assertEquals(a.hashCode(), b.hashCode(), "Deux records egaux doivent avoir le meme hashCode");
     }
 
     @Test
     void testHashCodeConsistency() {
-        RuleMetadata a = new RuleMetadata();
-        a.setKey("GCI1");
-        a.setType("CODE_SMELL");
-        a.setDefaultSeverity("MINOR");
+        RuleMetadata a = new RuleMetadata("GCI1", "CODE_SMELL", "MINOR");
         assertEquals(a.hashCode(), a.hashCode());
     }
 
     @Test
     void testHashCodeForNullFields() {
-        RuleMetadata a = new RuleMetadata();
-        // ne doit pas lancer de NullPointerException
+        RuleMetadata a = new RuleMetadata(null, null, null);
         assertDoesNotThrow(a::hashCode);
     }
 
     // -----------------------------------------------------------------------
-    // toString (généré par Lombok @Data)
+    // toString — généré nativement par le record
     // -----------------------------------------------------------------------
 
     @Test
     void testToStringContainsFieldValues() {
-        RuleMetadata rule = new RuleMetadata();
-        rule.setKey("GCI99");
-        rule.setType("BUG");
-        rule.setDefaultSeverity("MAJOR");
-
+        RuleMetadata rule = new RuleMetadata("GCI99", "BUG", "MAJOR");
         String str = rule.toString();
-        assertTrue(str.contains("GCI99"), "toString doit contenir la clé");
+        assertTrue(str.contains("GCI99"), "toString doit contenir la cle");
         assertTrue(str.contains("BUG"),   "toString doit contenir le type");
-        assertTrue(str.contains("MAJOR"), "toString doit contenir la sévérité");
+        assertTrue(str.contains("MAJOR"), "toString doit contenir la severite");
     }
 
     @Test
     void testToStringWithNullFields() {
-        RuleMetadata rule = new RuleMetadata();
+        RuleMetadata rule = new RuleMetadata(null, null, null);
         String str = rule.toString();
         assertNotNull(str);
-        // Lombok génère "null" pour les champs null
         assertTrue(str.contains("null"));
     }
 
     // -----------------------------------------------------------------------
-    // canEqual (généré par Lombok @Data)
+    // Structure du record
     // -----------------------------------------------------------------------
 
     @Test
-    void testCanEqualSameType() throws Exception {
-        RuleMetadata a = new RuleMetadata();
-        RuleMetadata b = new RuleMetadata();
-        java.lang.reflect.Method canEqual = RuleMetadata.class.getDeclaredMethod("canEqual", Object.class);
-        canEqual.setAccessible(true);
-        assertTrue((Boolean) canEqual.invoke(a, b));
+    void testIsRecord() {
+        assertTrue(RuleMetadata.class.isRecord(), "RuleMetadata doit etre un record Java");
     }
 
     @Test
-    void testCanEqualDifferentType() throws Exception {
-        RuleMetadata a = new RuleMetadata();
-        java.lang.reflect.Method canEqual = RuleMetadata.class.getDeclaredMethod("canEqual", Object.class);
-        canEqual.setAccessible(true);
-        assertFalse((Boolean) canEqual.invoke(a, "a string"));
+    void testRecordComponentCount() {
+        assertEquals(3, RuleMetadata.class.getRecordComponents().length,
+            "RuleMetadata doit avoir exactement 3 composants");
+    }
+
+    @Test
+    void testRecordComponentNames() {
+        var components = RuleMetadata.class.getRecordComponents();
+        assertEquals("key",             components[0].getName());
+        assertEquals("type",            components[1].getName());
+        assertEquals("defaultSeverity", components[2].getName());
+    }
+
+    @Test
+    void testRecordHasNoSetters() {
+        long setterCount = Arrays.stream(RuleMetadata.class.getMethods())
+            .filter(m -> m.getName().startsWith("set"))
+            .count();
+        assertEquals(0, setterCount, "Un record ne doit pas avoir de setters");
     }
 }
-

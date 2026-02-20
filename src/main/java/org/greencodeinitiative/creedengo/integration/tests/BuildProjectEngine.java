@@ -24,7 +24,6 @@ import com.sonar.orchestrator.locator.Location;
 import com.sonar.orchestrator.locator.MavenLocation;
 import com.sonar.orchestrator.locator.URLLocation;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.greencodeinitiative.creedengo.integration.tests.profile.ProfileBackup;
 import org.junit.jupiter.api.AfterAll;
@@ -144,6 +143,7 @@ public abstract class BuildProjectEngine {
 				// - Run SonarQube Scanner on test project
 				.peek(p -> LOGGER.info("Running SonarQube Scanner on project: {}", p.getPom()))
 				.forEach(orchestrator::executeBuild);
+
 	}
 
 	private static String systemProperty(String propertyName) {
