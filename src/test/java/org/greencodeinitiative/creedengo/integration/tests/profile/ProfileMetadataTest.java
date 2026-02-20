@@ -135,6 +135,19 @@ class ProfileMetadataTest {
     }
 
     @Test
+    void testToStringRecordFormat() {
+        // Le toString d'un record Java suit le format :
+        // NomDuRecord[composant1=valeur1, composant2=valeur2, ...]
+        ProfileMetadata metadata = new ProfileMetadata("creedengo way", "java", List.of("GCI1"));
+        String str = metadata.toString();
+        assertEquals(
+            "ProfileMetadata[name=creedengo way, language=java, ruleKeys=[GCI1]]",
+            str,
+            "Le toString d'un record doit suivre le format NomRecord[champ=valeur, ...]"
+        );
+    }
+
+    @Test
     void testToStringWithNullFields() {
         ProfileMetadata metadata = new ProfileMetadata(null, null, null);
         String str = metadata.toString();
@@ -173,6 +186,7 @@ class ProfileMetadataTest {
             .count();
         assertEquals(0, setterCount, "Un record ne doit pas avoir de setters");
     }
+
 }
 
 

@@ -7,7 +7,6 @@ import java.net.URL;
 import java.text.MessageFormat;
 import java.util.Base64;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -117,13 +116,13 @@ public class ProfileBackup {
 	}
 
 	private String xmlProfile() throws IOException {
-		ProfileMetadata profileMetadata = profileMetadata();
-		String language = profileMetadata.language();
-		List<RuleMetadata> rules = profileMetadata.ruleKeys().stream()
+		ProfileMetadata profileMetadataLocal = profileMetadata();
+		String language = profileMetadataLocal.language();
+		List<RuleMetadata> rules = profileMetadataLocal.ruleKeys().stream()
 				.map(ruleKey -> this.loadRule(language, ruleKey))
-				.collect(Collectors.toList());
+				.toList();
 		StringBuilder output = new StringBuilder();
-		String repositoryKey = "creedengo-" + profileMetadata.language();
+		String repositoryKey = "creedengo-" + profileMetadataLocal.language();
 		rules.forEach(rule -> output.append(
 				xmlRule(
 						repositoryKey,
@@ -133,8 +132,8 @@ public class ProfileBackup {
 				))
 		);
 		return TEMPLATE_PROFIL.format(new Object[]{
-				profileMetadata.name(),
-				profileMetadata.language(),
+				profileMetadataLocal.name(),
+				profileMetadataLocal.language(),
 				output.toString()
 		});
 	}
