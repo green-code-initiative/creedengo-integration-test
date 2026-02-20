@@ -102,7 +102,38 @@
         <lombok.version>1.18.42</lombok.version>
         <data-url-handler.version>0.0.1</data-url-handler.version>
 
+        <!-- Mutation testing -->
+        <pitest.version>1.17.3</pitest.version>
+        <pitest-junit5-plugin.version>1.2.1</pitest-junit5-plugin.version>
+        <junit.version>5.13.4</junit.version>
+
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- Alignement des versions JUnit Platform pour éviter les conflits avec PITest -->
+            <dependency>
+                <groupId>org.junit.platform</groupId>
+                <artifactId>junit-platform-launcher</artifactId>
+                <version>1.13.4</version>
+            </dependency>
+            <dependency>
+                <groupId>org.junit.platform</groupId>
+                <artifactId>junit-platform-engine</artifactId>
+                <version>1.13.4</version>
+            </dependency>
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-engine</artifactId>
+                <version>${junit.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-api</artifactId>
+                <version>${junit.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <dependencies>
 
@@ -139,9 +170,91 @@
             <version>${lombok.version}</version>
             <scope>provided</scope>
         </dependency>
+
+        <!-- Moteur JUnit Jupiter requis par le minion PITest pour exécuter les tests -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <profiles>
+        <profile>
+            <id>mutation-testing</id>
+            <!--
+                Mutation testing avec PITest, ciblant uniquement ProfileBackupTest.
+                Lancer avec : ./mvnw test-compile pitest:mutationCoverage -P mutation-testing
+            -->
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.pitest</groupId>
+                        <artifactId>pitest-maven</artifactId>
+                        <version>${pitest.version}</version>
+                        <dependencies>
+                            <!-- Plugin JUnit 5 pour PITest -->
+                            <dependency>
+                                <groupId>org.pitest</groupId>
+                                <artifactId>pitest-junit5-plugin</artifactId>
+                                <version>${pitest-junit5-plugin.version}</version>
+                                <exclusions>
+                                    <!-- Exclure le launcher embarqué par le plugin pour utiliser celui du projet -->
+                                    <exclusion>
+                                        <groupId>org.junit.platform</groupId>
+                                        <artifactId>junit-platform-launcher</artifactId>
+                                    </exclusion>
+                                </exclusions>
+                            </dependency>
+                            <!-- Fournir le bon TestEngine au minion PITest -->
+                            <dependency>
+                                <groupId>org.junit.jupiter</groupId>
+                                <artifactId>junit-jupiter-engine</artifactId>
+                                <version>${junit.version}</version>
+                            </dependency>
+                            <!-- Launcher aligné sur la version du projet -->
+                            <dependency>
+                                <groupId>org.junit.platform</groupId>
+                                <artifactId>junit-platform-launcher</artifactId>
+                                <version>1.13.4</version>
+                            </dependency>
+                        </dependencies>
+                        <configuration>
+                            <!-- Classes de production à muter -->
+                            <targetClasses>
+                                <param>org.greencodeinitiative.creedengo.integration.tests.profile.ProfileBackup</param>
+                            </targetClasses>
+                            <!-- Uniquement ProfileBackupTest comme suite de test -->
+                            <targetTests>
+                                <param>org.greencodeinitiative.creedengo.integration.tests.profile.ProfileBackupTest</param>
+                            </targetTests>
+                            <!-- Flags Java 17 requis par PITest -->
+                            <jvmArgs>
+                                <jvmArg>--add-opens=java.base/java.lang=ALL-UNNAMED</jvmArg>
+                                <jvmArg>--add-opens=java.base/java.util=ALL-UNNAMED</jvmArg>
+                                <jvmArg>--add-opens=java.base/java.io=ALL-UNNAMED</jvmArg>
+                            </jvmArgs>
+                            <!-- Opérateurs de mutation standard -->
+                            <mutators>
+                                <mutator>STRONGER</mutator>
+                            </mutators>
+                            <!-- Seuils de qualité : échec si score < 80% -->
+                            <mutationThreshold>80</mutationThreshold>
+                            <coverageThreshold>80</coverageThreshold>
+                            <!-- Rapport HTML + XML -->
+                            <outputFormats>
+                                <outputFormat>HTML</outputFormat>
+                                <outputFormat>XML</outputFormat>
+                            </outputFormats>
+                            <timestampedReports>false</timestampedReports>
+                            <verbose>false</verbose>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
         <profile>
             <id>maven-central-publishing</id>
             <!--
