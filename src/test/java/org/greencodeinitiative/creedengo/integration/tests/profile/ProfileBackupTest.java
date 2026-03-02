@@ -245,11 +245,23 @@ class ProfileBackupTest {
 
     @Test
     void testMetadataIsCachedAfterFirstCall() throws IOException {
-        URI profileUri = createProfileJson("cached profile", "java", List.of());
-        ProfileBackup backup = new ProfileBackup(profileUri);
-        // Two calls must return the same value (internal cache)
-        assertEquals(backup.language(), backup.language());
-        assertEquals(backup.name(),     backup.name());
+        // Write the profile JSON in a file we can delete manually
+        Path jsonFile = tempDir.resolve("cache_first_call.json");
+        Files.writeString(jsonFile,
+            new ObjectMapper().writeValueAsString(new ProfileMetadata("cached profile", "java", List.of())),
+            StandardCharsets.UTF_8);
+        ProfileBackup backup = new ProfileBackup(jsonFile.toUri());
+
+        // Warm up cache
+        assertEquals("cached profile", backup.name());
+        assertEquals("java",           backup.language());
+
+        // Remove the backing file — both accessors must still work via cache
+        Files.delete(jsonFile);
+        assertEquals("cached profile", backup.name(),
+            "name() must hit the cache after the file is deleted");
+        assertEquals("java", backup.language(),
+            "language() must hit the cache after the file is deleted");
     }
 
     // -----------------------------------------------------------------------
@@ -407,26 +419,53 @@ class ProfileBackupTest {
 
     // -----------------------------------------------------------------------
     // profileMetadata() cache — "profileMetadata != null" branch
+    //
+    // Strategy: delete the JSON file AFTER the first call.
+    // • With the guard (if == null): the 2nd call hits the cache → success.
+    // • Without the guard (mutant):  the 2nd call tries to re-read the deleted
+    //   file → throws RuntimeException → mutant is KILLED.
     // -----------------------------------------------------------------------
 
     @Test
-    void testProfileMetadataCache_secondCallReturnsSameLanguage() throws IOException {
-        URI profileUri = createProfileJson("cached", "java", List.of());
-        ProfileBackup backup = new ProfileBackup(profileUri);
-        // 1st call: loads and caches
-        String first = backup.language();
-        // 2nd call: uses the cache (if == null branch → false)
-        String second = backup.language();
-        assertEquals(first, second, "Both calls must return the same value from the cache");
+    void testProfileMetadataCache_secondCallSucceedsAfterFileDeleted() throws IOException {
+        // Write the profile JSON in a file we control (not tempDir auto-cleanup)
+        Path jsonFile = tempDir.resolve("cache_test_profile.json");
+        String json = new ObjectMapper().writeValueAsString(
+            new ProfileMetadata("cached", "java", List.of())
+        );
+        Files.writeString(jsonFile, json, StandardCharsets.UTF_8);
+        ProfileBackup backup = new ProfileBackup(jsonFile.toUri());
+
+        // 1st call: populates the internal cache
+        assertEquals("java", backup.language());
+
+        // Delete the source file — the cache must be sufficient for subsequent calls
+        Files.delete(jsonFile);
+        assertFalse(Files.exists(jsonFile), "The JSON file must no longer exist");
+
+        // 2nd call: must succeed via cache (would throw if the guard is removed)
+        assertEquals("java", backup.language(),
+            "language() must return the cached value even after the JSON file is deleted");
     }
 
     @Test
-    void testProfileMetadataCache_languageThenName_useSameCache() throws IOException {
-        URI profileUri = createProfileJson("profil cache", "js", List.of());
-        ProfileBackup backup = new ProfileBackup(profileUri);
-        // language() loads the cache, name() must reuse it without re-reading the file
-        assertEquals("js",           backup.language());
-        assertEquals("profil cache", backup.name());
+    void testProfileMetadataCache_nameSucceedsAfterFileDeleted() throws IOException {
+        Path jsonFile = tempDir.resolve("cache_test_name.json");
+        String json = new ObjectMapper().writeValueAsString(
+            new ProfileMetadata("profil cache", "js", List.of())
+        );
+        Files.writeString(jsonFile, json, StandardCharsets.UTF_8);
+        ProfileBackup backup = new ProfileBackup(jsonFile.toUri());
+
+        // Warm up the cache via language()
+        assertEquals("js", backup.language());
+
+        // Delete the source file
+        Files.delete(jsonFile);
+
+        // name() must also succeed via the shared cache
+        assertEquals("profil cache", backup.name(),
+            "name() must return the cached value even after the JSON file is deleted");
     }
 
     // -----------------------------------------------------------------------
