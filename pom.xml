@@ -111,7 +111,7 @@
 
     <dependencyManagement>
         <dependencies>
-            <!-- Alignement des versions JUnit Platform pour éviter les conflits avec PITest -->
+            <!-- Align JUnit Platform versions to avoid conflicts with PITest -->
             <dependency>
                 <groupId>org.junit.platform</groupId>
                 <artifactId>junit-platform-launcher</artifactId>
@@ -171,7 +171,7 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- Moteur JUnit Jupiter requis par le minion PITest pour exécuter les tests -->
+        <!-- JUnit Jupiter engine required by the PITest minion to run tests -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
@@ -184,8 +184,8 @@
         <profile>
             <id>mutation-testing</id>
             <!--
-                Mutation testing avec PITest, ciblant uniquement ProfileBackupTest.
-                Lancer avec : ./mvnw test-compile pitest:mutationCoverage -P mutation-testing
+                Mutation testing with PITest, targeting only ProfileBackupTest.
+                Run with: ./mvnw test-compile pitest:mutationCoverage -P mutation-testing
             -->
             <build>
                 <plugins>
@@ -194,26 +194,26 @@
                         <artifactId>pitest-maven</artifactId>
                         <version>${pitest.version}</version>
                         <dependencies>
-                            <!-- Plugin JUnit 5 pour PITest -->
+                            <!-- JUnit 5 plugin for PITest -->
                             <dependency>
                                 <groupId>org.pitest</groupId>
                                 <artifactId>pitest-junit5-plugin</artifactId>
                                 <version>${pitest-junit5-plugin.version}</version>
                                 <exclusions>
-                                    <!-- Exclure le launcher embarqué par le plugin pour utiliser celui du projet -->
+                                    <!-- Exclude the launcher bundled by the plugin to use the project's one -->
                                     <exclusion>
                                         <groupId>org.junit.platform</groupId>
                                         <artifactId>junit-platform-launcher</artifactId>
                                     </exclusion>
                                 </exclusions>
                             </dependency>
-                            <!-- Fournir le bon TestEngine au minion PITest -->
+                            <!-- Provide the correct TestEngine to the PITest minion -->
                             <dependency>
                                 <groupId>org.junit.jupiter</groupId>
                                 <artifactId>junit-jupiter-engine</artifactId>
                                 <version>${junit.version}</version>
                             </dependency>
-                            <!-- Launcher aligné sur la version du projet -->
+                            <!-- Launcher aligned with the project version -->
                             <dependency>
                                 <groupId>org.junit.platform</groupId>
                                 <artifactId>junit-platform-launcher</artifactId>
@@ -221,28 +221,28 @@
                             </dependency>
                         </dependencies>
                         <configuration>
-                            <!-- Classes de production à muter -->
+                            <!-- Production classes to mutate -->
                             <targetClasses>
                                 <param>org.greencodeinitiative.creedengo.integration.tests.profile.ProfileBackup</param>
                             </targetClasses>
-                            <!-- Uniquement ProfileBackupTest comme suite de test -->
+                            <!-- Only ProfileBackupTest as test suite -->
                             <targetTests>
                                 <param>org.greencodeinitiative.creedengo.integration.tests.profile.ProfileBackupTest</param>
                             </targetTests>
-                            <!-- Flags Java 17 requis par PITest -->
+                            <!-- Java 17 flags required by PITest -->
                             <jvmArgs>
                                 <jvmArg>--add-opens=java.base/java.lang=ALL-UNNAMED</jvmArg>
                                 <jvmArg>--add-opens=java.base/java.util=ALL-UNNAMED</jvmArg>
                                 <jvmArg>--add-opens=java.base/java.io=ALL-UNNAMED</jvmArg>
                             </jvmArgs>
-                            <!-- Opérateurs de mutation standard -->
+                            <!-- Standard mutation operators -->
                             <mutators>
                                 <mutator>STRONGER</mutator>
                             </mutators>
-                            <!-- Seuils de qualité : échec si score < 80% -->
+                            <!-- Quality thresholds: fail if score < 80% -->
                             <mutationThreshold>80</mutationThreshold>
                             <coverageThreshold>80</coverageThreshold>
-                            <!-- Rapport HTML + XML -->
+                            <!-- HTML + XML report -->
                             <outputFormats>
                                 <outputFormat>HTML</outputFormat>
                                 <outputFormat>XML</outputFormat>
