@@ -97,7 +97,12 @@
         <test-it.sonarqube.version>26.2.0.119303</test-it.sonarqube.version>
 
         <assertj.version>3.27.7</assertj.version>
-        <orchestrator.version>6.1.0.3962</orchestrator.version>
+
+        <!-- version 6 KO when compoenent integrated and integration test launched -->
+        <!-- error : java.lang.NoSuchMethodError: 'java.lang.Object org.apache.commons.lang3.ObjectUtils.getIfNull(java.lang.Object, java.lang.Object)' -->
+<!--        <orchestrator.version>6.1.0.3962</orchestrator.version>-->
+        <orchestrator.version>5.6.2.2625</orchestrator.version>
+
         <logback.version>1.5.31</logback.version>
         <data-url-handler.version>0.0.1</data-url-handler.version>
 
