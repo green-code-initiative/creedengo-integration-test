@@ -98,7 +98,7 @@
 
         <assertj.version>3.27.7</assertj.version>
 
-        <!-- version 6 KO when compoenent integrated and integration test launched -->
+        <!-- version 6 KO when component integrated and integration test launched -->
         <!-- error : java.lang.NoSuchMethodError: 'java.lang.Object org.apache.commons.lang3.ObjectUtils.getIfNull(java.lang.Object, java.lang.Object)' -->
 <!--        <orchestrator.version>6.1.0.3962</orchestrator.version>-->
         <orchestrator.version>5.6.2.2625</orchestrator.version>
