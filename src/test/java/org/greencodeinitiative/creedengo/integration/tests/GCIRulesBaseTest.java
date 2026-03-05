@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class GCIRulesBaseTest {
 
     // -----------------------------------------------------------------------
-    // Constantes de sévérité — valeur exacte de l'enum
+    // Severity constants — exact enum value
     // -----------------------------------------------------------------------
 
     @Test
@@ -51,11 +51,11 @@ class GCIRulesBaseTest {
     @Test
     void testDefaultSeverityIsSameInstanceAsSeverityMinor() {
         assertSame(GCIRulesBase.SEVERITY_MINOR, GCIRulesBase.SEVERITY,
-            "SEVERITY doit être la même référence que SEVERITY_MINOR");
+            "SEVERITY must be the same reference as SEVERITY_MINOR");
     }
 
     // -----------------------------------------------------------------------
-    // Constante de type
+    // Type constant
     // -----------------------------------------------------------------------
 
     @Test
@@ -74,7 +74,7 @@ class GCIRulesBaseTest {
     }
 
     // -----------------------------------------------------------------------
-    // Constantes d'effort — valeur exacte de chaque constante individuellement
+    // Effort constants — exact value of each constant individually
     // -----------------------------------------------------------------------
 
     @Test
@@ -126,7 +126,7 @@ class GCIRulesBaseTest {
             GCIRulesBase.EFFORT_50MIN, GCIRulesBase.EFFORT_1H
         };
         long distinctCount = java.util.Arrays.stream(efforts).distinct().count();
-        assertEquals(8, distinctCount, "Toutes les constantes d'effort doivent être distinctes");
+        assertEquals(8, distinctCount, "All effort constants must be distinct");
     }
 
     @Test
@@ -142,7 +142,7 @@ class GCIRulesBaseTest {
     }
 
     // -----------------------------------------------------------------------
-    // EXTRACT_FIELDS — taille exacte et chaque index individuellement
+    // EXTRACT_FIELDS — exact size and each index individually
     // -----------------------------------------------------------------------
 
     @Test
@@ -153,7 +153,7 @@ class GCIRulesBaseTest {
     @Test
     void testExtractFieldsHasExactlySevenElements() {
         assertEquals(7, GCIRulesBase.EXTRACT_FIELDS.length,
-            "EXTRACT_FIELDS doit contenir exactement 7 éléments");
+            "EXTRACT_FIELDS must contain exactly 7 elements");
     }
 
     @Test
@@ -200,10 +200,10 @@ class GCIRulesBaseTest {
     }
 
     // -----------------------------------------------------------------------
-    // checkIssuesForFile (5 args) — délégation vers la surcharge à 8 args
-    // Avec des tableaux de longueur égale, la validation de longueur passe,
-    // puis l'accès à analyzedProjects (null) provoque une exception.
-    // On vérifie que ce n'est PAS une AssertionError (la vérification de longueur a passé).
+    // checkIssuesForFile (5 args) — delegation to the 8-arg overload
+    // With arrays of equal length, the length validation passes,
+    // then accessing analyzedProjects (null) causes an exception.
+    // We verify that it is NOT an AssertionError (the length check passed).
     // -----------------------------------------------------------------------
 
     @Test
@@ -211,12 +211,12 @@ class GCIRulesBaseTest {
         GCIRulesBase base = new GCIRulesBase();
         int[] startLines = {5};
         int[] endLines   = {5};
-        // La vérification assertThat(startLines.length).isEqualTo(endLines.length) passe (1 == 1)
-        // Ensuite analyzedProjects est null → NullPointerException, pas AssertionError
+        // The assertThat(startLines.length).isEqualTo(endLines.length) check passes (1 == 1)
+        // Then analyzedProjects is null → NullPointerException, not AssertionError
         Throwable ex = assertThrows(Throwable.class,
             () -> base.checkIssuesForFile("file.java", "RULE", "msg", startLines, endLines));
         assertFalse(ex instanceof AssertionError,
-            "Une AssertionError ne doit pas être levée pour des tableaux de même longueur");
+            "An AssertionError must not be thrown for arrays of the same length");
     }
 
     @Test
@@ -227,18 +227,18 @@ class GCIRulesBaseTest {
         Throwable ex = assertThrows(Throwable.class,
             () -> base.checkIssuesForFile("MyFile.java", "RULE_ID", "message", startLines, endLines));
         assertFalse(ex instanceof AssertionError,
-            "Trois lignes valides ne doivent pas lever d'AssertionError sur la longueur");
+            "Three valid lines must not throw an AssertionError on the length check");
     }
 
     @Test
     void testCheckIssuesForFile5Args_usesDefaultSeverityMinor() throws Exception {
-        // On vérifie par réflexion que la surcharge 5-args appelle bien la surcharge 8-args
-        // avec SEVERITY (MINOR), TYPE (CODE_SMELL) et EFFORT_5MIN
+        // We verify via reflection that the 5-arg overload correctly calls the 8-arg overload
+        // with SEVERITY (MINOR), TYPE (CODE_SMELL) and EFFORT_5MIN
         Field severityField = GCIRulesBase.class.getDeclaredField("SEVERITY");
         severityField.setAccessible(true);
         Common.Severity defaultSeverity = (Common.Severity) severityField.get(null);
         assertEquals(Common.Severity.MINOR, defaultSeverity,
-            "La surcharge 5-args doit utiliser SEVERITY = MINOR");
+            "The 5-arg overload must use SEVERITY = MINOR");
     }
 
     @Test
@@ -247,7 +247,7 @@ class GCIRulesBaseTest {
         effortField.setAccessible(true);
         String defaultEffort = (String) effortField.get(null);
         assertEquals("5min", defaultEffort,
-            "La surcharge 5-args doit utiliser EFFORT_5MIN = '5min'");
+            "The 5-arg overload must use EFFORT_5MIN = '5min'");
     }
 
     @Test
@@ -256,11 +256,11 @@ class GCIRulesBaseTest {
         typeField.setAccessible(true);
         Common.RuleType defaultType = (Common.RuleType) typeField.get(null);
         assertEquals(Common.RuleType.CODE_SMELL, defaultType,
-            "La surcharge 5-args doit utiliser TYPE = CODE_SMELL");
+            "The 5-arg overload must use TYPE = CODE_SMELL");
     }
 
     // -----------------------------------------------------------------------
-    // checkIssuesForFile (8 args) — validation de la longueur des tableaux
+    // checkIssuesForFile (8 args) — array length validation
     // -----------------------------------------------------------------------
 
     @Test
@@ -273,7 +273,7 @@ class GCIRulesBaseTest {
                 "file.java", "RULE", "msg", startLines, endLines,
                 Common.Severity.MINOR, Common.RuleType.CODE_SMELL, "5min"));
         assertFalse(ex instanceof AssertionError,
-            "Des tableaux de même taille ne doivent pas lever d'AssertionError sur la longueur");
+            "Arrays of the same size must not throw an AssertionError on the length check");
     }
 
     @Test
@@ -312,13 +312,13 @@ class GCIRulesBaseTest {
     void testCheckIssuesForFile8Args_emptyArrays_passesLengthCheck() {
         GCIRulesBase base = new GCIRulesBase();
         int[] empty = {};
-        // 0 == 0 passe la vérification de longueur, puis échoue sur analyzedProjects null
+        // 0 == 0 passes the length check, then fails on null analyzedProjects
         Throwable ex = assertThrows(Throwable.class,
             () -> base.checkIssuesForFile(
                 "file.java", "RULE", "msg", empty, empty,
                 Common.Severity.MAJOR, Common.RuleType.BUG, "10min"));
         assertFalse(ex instanceof AssertionError,
-            "Des tableaux vides (0 == 0) ne doivent pas lever d'AssertionError sur la longueur");
+            "Empty arrays (0 == 0) must not throw an AssertionError on the length check");
     }
 
     @Test
@@ -346,21 +346,21 @@ class GCIRulesBaseTest {
     }
 
     // -----------------------------------------------------------------------
-    // Structure de la classe
+    // Class structure
     // -----------------------------------------------------------------------
 
     @Test
     void testGCIRulesBaseIsConcreteClass() {
         assertFalse(
             java.lang.reflect.Modifier.isAbstract(GCIRulesBase.class.getModifiers()),
-            "GCIRulesBase doit être une classe concrète instanciable"
+            "GCIRulesBase must be a concrete instantiable class"
         );
     }
 
     @Test
     void testGCIRulesBaseExtendsBuildProjectEngine() {
         assertEquals(BuildProjectEngine.class, GCIRulesBase.class.getSuperclass(),
-            "GCIRulesBase doit directement étendre BuildProjectEngine");
+            "GCIRulesBase must directly extend BuildProjectEngine");
     }
 
     @Test
@@ -372,7 +372,7 @@ class GCIRulesBaseTest {
     void testGCIRulesBaseIsPublic() {
         assertTrue(
             java.lang.reflect.Modifier.isPublic(GCIRulesBase.class.getModifiers()),
-            "GCIRulesBase doit être une classe publique"
+            "GCIRulesBase must be a public class"
         );
     }
 

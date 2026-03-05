@@ -20,28 +20,28 @@ class BuildProjectEngineTest {
     Path tempDir;
 
     // -----------------------------------------------------------------------
-    // Structure de la classe
+    // Class structure
     // -----------------------------------------------------------------------
 
     @Test
     void testClassIsAbstract() {
         assertTrue(Modifier.isAbstract(BuildProjectEngine.class.getModifiers()),
-            "BuildProjectEngine doit être abstraite");
+            "BuildProjectEngine must be abstract");
     }
 
     @Test
     void testClassHasDefaultNoArgConstructor() {
-        // Java génère un constructeur public sans paramètre pour les classes abstraites
-        // sans constructeur explicite. On vérifie qu'il n'y a qu'un seul constructeur, sans paramètre.
+        // Java generates a public no-arg constructor for abstract classes
+        // without an explicit constructor. We verify there is only one constructor, with no parameters.
         var constructors = BuildProjectEngine.class.getConstructors();
         assertEquals(1, constructors.length,
-            "BuildProjectEngine doit avoir exactement un constructeur public (no-arg implicite)");
+            "BuildProjectEngine must have exactly one public constructor (implicit no-arg)");
         assertEquals(0, constructors[0].getParameterCount(),
-            "Le constructeur doit être sans paramètre");
+            "The constructor must have no parameters");
     }
 
     // -----------------------------------------------------------------------
-    // splitAndTrim — méthode statique privée, testée par réflexion
+    // splitAndTrim — private static method, tested via reflection
     // -----------------------------------------------------------------------
 
     @SuppressWarnings("unchecked")
@@ -72,7 +72,7 @@ class BuildProjectEngineTest {
     @Test
     void testSplitAndTrim_filterEmptyTokens() throws Exception {
         Stream<String> result = invokeSplitAndTrim("a,,b", "\\s*,\\s*");
-        // Le token vide entre les deux virgules doit être filtré
+        // The empty token between the two commas must be filtered out
         assertArrayEquals(new String[]{"a", "b"}, result.toArray(String[]::new));
     }
 
@@ -92,7 +92,7 @@ class BuildProjectEngineTest {
     }
 
     // -----------------------------------------------------------------------
-    // toPluginLocation — MavenLocation (GAV) et FileLocation (file://)
+    // toPluginLocation — MavenLocation (GAV) and FileLocation (file://)
     // -----------------------------------------------------------------------
 
     private Object invokeToPluginLocation(String location) throws Exception {
@@ -105,37 +105,37 @@ class BuildProjectEngineTest {
     void testToPluginLocation_mavenGAV_returnsMavenLocation() throws Exception {
         Object location = invokeToPluginLocation("org.example:my-plugin:1.2.3");
         assertInstanceOf(MavenLocation.class, location,
-            "Un GAV Maven doit produire un MavenLocation");
+            "A Maven GAV must produce a MavenLocation");
     }
 
     @Test
     void testToPluginLocation_mavenGAV_invalidThrows() {
         assertThrows(Exception.class,
             () -> invokeToPluginLocation("org.example:missing-version"),
-            "Un GAV Maven incomplet doit lever une exception"
+            "An incomplete Maven GAV must throw an exception"
         );
     }
 
     @Test
     void testToPluginLocation_fileLocation_returnsFileLocation() throws Exception {
-        // Crée un fichier temporaire réel pour FileLocation
+        // Create a real temporary file for FileLocation
         Path fakeJar = tempDir.resolve("plugin.jar");
         Files.createFile(fakeJar);
         Object location = invokeToPluginLocation("file://" + fakeJar.toAbsolutePath());
         assertInstanceOf(FileLocation.class, location,
-            "Un chemin file:// doit produire un FileLocation");
+            "A file:// path must produce a FileLocation");
     }
 
     @Test
     void testToPluginLocation_emptyStringThrows() {
         assertThrows(Exception.class,
             () -> invokeToPluginLocation(""),
-            "Une chaîne vide doit lever une exception"
+            "An empty string must throw an exception"
         );
     }
 
     // -----------------------------------------------------------------------
-    // commaSeparatedValues et pipeSeparatedValues
+    // commaSeparatedValues and pipeSeparatedValues
     // -----------------------------------------------------------------------
 
     @Test
@@ -157,20 +157,20 @@ class BuildProjectEngineTest {
     }
 
     // -----------------------------------------------------------------------
-    // systemProperty — doit lever IllegalStateException si propriété absente
+    // systemProperty — must throw IllegalStateException if property is missing
     // -----------------------------------------------------------------------
 
     @Test
     void testSystemProperty_throwsWhenMissing() throws Exception {
         Method method = BuildProjectEngine.class.getDeclaredMethod("systemProperty", String.class);
         method.setAccessible(true);
-        // Propriété inexistante → IllegalStateException wrappée dans InvocationTargetException
+        // Non-existent property → IllegalStateException wrapped in InvocationTargetException
         Exception ex = assertThrows(Exception.class,
             () -> method.invoke(null, "test-it.nonexistent.property." + System.nanoTime())
         );
         Throwable cause = ex.getCause() != null ? ex.getCause() : ex;
         assertInstanceOf(IllegalStateException.class, cause,
-            "Doit lever IllegalStateException quand la propriété système est absente");
+            "Must throw IllegalStateException when the system property is absent");
     }
 
     @Test
@@ -189,17 +189,17 @@ class BuildProjectEngineTest {
     }
 
     // -----------------------------------------------------------------------
-    // ProjectToAnalyze (classe interne protégée)
+    // ProjectToAnalyze (protected inner class)
     // -----------------------------------------------------------------------
 
     @Test
     void testProjectToAnalyzeClass_exists() {
-        // La présence de la classe interne est validée en tentant de la charger par son nom binaire
+        // The presence of the inner class is validated by attempting to load it by its binary name
         assertDoesNotThrow(
             () -> Class.forName(
                 "org.greencodeinitiative.creedengo.integration.tests.BuildProjectEngine$ProjectToAnalyze"
             ),
-            "La classe interne ProjectToAnalyze doit exister"
+            "The inner class ProjectToAnalyze must exist"
         );
     }
 
@@ -209,7 +209,7 @@ class BuildProjectEngineTest {
             "org.greencodeinitiative.creedengo.integration.tests.BuildProjectEngine$ProjectToAnalyze"
         );
         assertTrue(Modifier.isStatic(inner.getModifiers()),
-            "ProjectToAnalyze doit être une classe statique interne");
+            "ProjectToAnalyze must be a static inner class");
     }
 
     private Object createProjectToAnalyze(URI pomUri, String key, String name) throws Exception {
@@ -260,7 +260,7 @@ class BuildProjectEngineTest {
         );
         Method createMavenBuild = inner.getMethod("createMavenBuild");
         Object mavenBuild = assertDoesNotThrow(() -> createMavenBuild.invoke(instance));
-        assertNotNull(mavenBuild, "createMavenBuild() doit retourner un objet non null");
+        assertNotNull(mavenBuild, "createMavenBuild() must return a non-null object");
     }
 }
 

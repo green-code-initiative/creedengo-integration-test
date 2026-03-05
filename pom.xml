@@ -97,12 +97,47 @@
         <test-it.sonarqube.version>26.2.0.119303</test-it.sonarqube.version>
 
         <assertj.version>3.27.7</assertj.version>
-        <orchestrator.version>6.1.0.3962</orchestrator.version>
+
+        <!-- version 6 KO when component integrated and integration test launched -->
+        <!-- error : java.lang.NoSuchMethodError: 'java.lang.Object org.apache.commons.lang3.ObjectUtils.getIfNull(java.lang.Object, java.lang.Object)' -->
+<!--        <orchestrator.version>6.1.0.3962</orchestrator.version>-->
+        <orchestrator.version>5.6.2.2625</orchestrator.version>
+
         <logback.version>1.5.31</logback.version>
-        <lombok.version>1.18.42</lombok.version>
         <data-url-handler.version>0.0.1</data-url-handler.version>
 
+        <!-- Mutation testing -->
+        <pitest.version>1.17.3</pitest.version>
+        <pitest-junit5-plugin.version>1.2.1</pitest-junit5-plugin.version>
+        <junit.version>5.13.4</junit.version>
+
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- Align JUnit Platform versions to avoid conflicts with PITest -->
+            <dependency>
+                <groupId>org.junit.platform</groupId>
+                <artifactId>junit-platform-launcher</artifactId>
+                <version>1.13.4</version>
+            </dependency>
+            <dependency>
+                <groupId>org.junit.platform</groupId>
+                <artifactId>junit-platform-engine</artifactId>
+                <version>1.13.4</version>
+            </dependency>
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-engine</artifactId>
+                <version>${junit.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-api</artifactId>
+                <version>${junit.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <dependencies>
 
@@ -133,15 +168,91 @@
             <artifactId>logback-classic</artifactId>
             <version>${logback.version}</version>
         </dependency>
+
+        <!-- JUnit Jupiter engine required by the PITest minion to run tests -->
         <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>${lombok.version}</version>
-            <scope>provided</scope>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <scope>test</scope>
         </dependency>
+
     </dependencies>
 
     <profiles>
+        <profile>
+            <id>mutation-testing</id>
+            <!--
+                Mutation testing with PITest, targeting only ProfileBackupTest.
+                Run with: ./mvnw test-compile pitest:mutationCoverage -P mutation-testing
+            -->
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.pitest</groupId>
+                        <artifactId>pitest-maven</artifactId>
+                        <version>${pitest.version}</version>
+                        <dependencies>
+                            <!-- JUnit 5 plugin for PITest -->
+                            <dependency>
+                                <groupId>org.pitest</groupId>
+                                <artifactId>pitest-junit5-plugin</artifactId>
+                                <version>${pitest-junit5-plugin.version}</version>
+                                <exclusions>
+                                    <!-- Exclude the launcher bundled by the plugin to use the project's one -->
+                                    <exclusion>
+                                        <groupId>org.junit.platform</groupId>
+                                        <artifactId>junit-platform-launcher</artifactId>
+                                    </exclusion>
+                                </exclusions>
+                            </dependency>
+                            <!-- Provide the correct TestEngine to the PITest minion -->
+                            <dependency>
+                                <groupId>org.junit.jupiter</groupId>
+                                <artifactId>junit-jupiter-engine</artifactId>
+                                <version>${junit.version}</version>
+                            </dependency>
+                            <!-- Launcher aligned with the project version -->
+                            <dependency>
+                                <groupId>org.junit.platform</groupId>
+                                <artifactId>junit-platform-launcher</artifactId>
+                                <version>1.13.4</version>
+                            </dependency>
+                        </dependencies>
+                        <configuration>
+                            <!-- Production classes to mutate -->
+                            <targetClasses>
+                                <param>org.greencodeinitiative.creedengo.integration.tests.profile.ProfileBackup</param>
+                            </targetClasses>
+                            <!-- Only ProfileBackupTest as test suite -->
+                            <targetTests>
+                                <param>org.greencodeinitiative.creedengo.integration.tests.profile.ProfileBackupTest</param>
+                            </targetTests>
+                            <!-- Java 17 flags required by PITest -->
+                            <jvmArgs>
+                                <jvmArg>--add-opens=java.base/java.lang=ALL-UNNAMED</jvmArg>
+                                <jvmArg>--add-opens=java.base/java.util=ALL-UNNAMED</jvmArg>
+                                <jvmArg>--add-opens=java.base/java.io=ALL-UNNAMED</jvmArg>
+                            </jvmArgs>
+                            <!-- Standard mutation operators -->
+                            <mutators>
+                                <mutator>STRONGER</mutator>
+                            </mutators>
+                            <!-- Quality thresholds: fail if score < 80% -->
+                            <mutationThreshold>80</mutationThreshold>
+                            <coverageThreshold>80</coverageThreshold>
+                            <!-- HTML + XML report -->
+                            <outputFormats>
+                                <outputFormat>HTML</outputFormat>
+                                <outputFormat>XML</outputFormat>
+                            </outputFormats>
+                            <timestampedReports>false</timestampedReports>
+                            <verbose>false</verbose>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
         <profile>
             <id>maven-central-publishing</id>
             <!--

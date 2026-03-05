@@ -7,7 +7,6 @@ import java.net.URL;
 import java.text.MessageFormat;
 import java.util.Base64;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -88,11 +87,11 @@ public class ProfileBackup {
 	}
 
 	public String language() {
-		return profileMetadata().getLanguage();
+		return profileMetadata().language();
 	}
 
 	public String name() {
-		return profileMetadata().getName();
+		return profileMetadata().name();
 	}
 
 	private ProfileMetadata profileMetadata() {
@@ -108,33 +107,33 @@ public class ProfileBackup {
 
 	private RuleMetadata loadRule(String language, String ruleKey) {
 		try (InputStream ruleMetadataJsonFile = ClassLoader.getSystemResourceAsStream("org/green-code-initiative/rules/" + language + "/" + ruleKey + ".json")) {
-			RuleMetadata result = mapper.readValue(ruleMetadataJsonFile, RuleMetadata.class);
-			result.setKey(ruleKey);
-			return result;
+			RuleMetadata parsed = mapper.readValue(ruleMetadataJsonFile, RuleMetadata.class);
+			// Le record est immutable : on reconstruit avec la clé issue du nom de fichier
+			return new RuleMetadata(ruleKey, parsed.type(), parsed.defaultSeverity());
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
 	private String xmlProfile() throws IOException {
-		ProfileMetadata profileMetadata = profileMetadata();
-		String language = profileMetadata.getLanguage();
-		List<RuleMetadata> rules = profileMetadata.getRuleKeys().stream()
+		ProfileMetadata profileMetadataLocal = profileMetadata();
+		String language = profileMetadataLocal.language();
+		List<RuleMetadata> rules = profileMetadataLocal.ruleKeys().stream()
 				.map(ruleKey -> this.loadRule(language, ruleKey))
-				.collect(Collectors.toList());
+				.toList();
 		StringBuilder output = new StringBuilder();
-		String repositoryKey = "creedengo-" + profileMetadata.getLanguage();
+		String repositoryKey = "creedengo-" + profileMetadataLocal.language();
 		rules.forEach(rule -> output.append(
 				xmlRule(
 						repositoryKey,
-						rule.getKey(),
-						rule.getType(),
-						rule.getDefaultSeverity().toUpperCase()
+						rule.key(),
+						rule.type(),
+						rule.defaultSeverity().toUpperCase()
 				))
 		);
 		return TEMPLATE_PROFIL.format(new Object[]{
-				profileMetadata.getName(),
-				profileMetadata.getLanguage(),
+				profileMetadataLocal.name(),
+				profileMetadataLocal.language(),
 				output.toString()
 		});
 	}

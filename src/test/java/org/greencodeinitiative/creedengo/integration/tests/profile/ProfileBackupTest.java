@@ -27,15 +27,11 @@ class ProfileBackupTest {
     // -----------------------------------------------------------------------
 
     /**
-     * Crée un fichier JSON de profil dans le répertoire temporaire et retourne son URI.
+     * Creates a profile JSON file in the temporary directory and returns its URI.
      */
     private URI createProfileJson(String name, String language, List<String> ruleKeys) throws IOException {
         String json = new ObjectMapper().writeValueAsString(
-            new ProfileMetadata() {{
-                setName(name);
-                setLanguage(language);
-                setRuleKeys(ruleKeys);
-            }}
+            new ProfileMetadata(name, language, ruleKeys)
         );
         Path jsonFile = tempDir.resolve("profile.json");
         Files.writeString(jsonFile, json, StandardCharsets.UTF_8);
@@ -43,7 +39,7 @@ class ProfileBackupTest {
     }
 
     // -----------------------------------------------------------------------
-    // Constante TEMPLATE_PROFIL — format text block (tabulations, inline <rules>)
+    // TEMPLATE_PROFIL constant — text block format (tabs, inline <rules>)
     // -----------------------------------------------------------------------
 
     @Test
@@ -52,7 +48,7 @@ class ProfileBackupTest {
         f.setAccessible(true);
         String xml = ((MessageFormat) f.get(null)).format(new Object[]{"my-profile", "java", ""});
         assertTrue(xml.contains("<name>my-profile</name>"),
-            "Le XML doit contenir la balise <name> avec la valeur");
+            "The XML must contain the <name> tag with its value");
     }
 
     @Test
@@ -61,7 +57,7 @@ class ProfileBackupTest {
         f.setAccessible(true);
         String xml = ((MessageFormat) f.get(null)).format(new Object[]{"profile", "python", ""});
         assertTrue(xml.contains("<language>python</language>"),
-            "Le XML doit contenir la balise <language> avec la valeur");
+            "The XML must contain the <language> tag with its value");
     }
 
     @Test
@@ -69,9 +65,9 @@ class ProfileBackupTest {
         Field f = ProfileBackup.class.getDeclaredField("TEMPLATE_PROFIL");
         f.setAccessible(true);
         String xml = ((MessageFormat) f.get(null)).format(new Object[]{"profile", "java", "<rule/>"});
-        assertTrue(xml.contains("<rules>"),  "Le XML doit contenir la balise <rules>");
-        assertTrue(xml.contains("</rules>"), "Le XML doit fermer la balise <rules>");
-        assertTrue(xml.contains("<rule/>"),  "Le XML doit contenir les règles injectées");
+        assertTrue(xml.contains("<rules>"),  "The XML must contain the <rules> tag");
+        assertTrue(xml.contains("</rules>"), "The XML must close the <rules> tag");
+        assertTrue(xml.contains("<rule/>"),  "The XML must contain the injected rules");
     }
 
     @Test
@@ -80,7 +76,7 @@ class ProfileBackupTest {
         f.setAccessible(true);
         String xml = ((MessageFormat) f.get(null)).format(new Object[]{"p", "l", ""});
         assertTrue(xml.startsWith("<?xml"),
-            "Le XML doit commencer par la déclaration XML");
+            "The XML must start with the XML declaration");
     }
 
     @Test
@@ -88,18 +84,18 @@ class ProfileBackupTest {
         Field f = ProfileBackup.class.getDeclaredField("TEMPLATE_PROFIL");
         f.setAccessible(true);
         String xml = ((MessageFormat) f.get(null)).format(new Object[]{"p", "l", ""});
-        assertTrue(xml.contains("<profile>"),  "Le XML doit contenir la balise <profile>");
-        assertTrue(xml.contains("</profile>"), "Le XML doit fermer la balise </profile>");
+        assertTrue(xml.contains("<profile>"),  "The XML must contain the <profile> tag");
+        assertTrue(xml.contains("</profile>"), "The XML must close the </profile> tag");
     }
 
     @Test
     void testTemplateProfil_nameIsIndentedWithTab() throws Exception {
-        // Le text block utilise \t pour l'indentation des balises enfants
+        // The text block uses \t for indenting child tags
         Field f = ProfileBackup.class.getDeclaredField("TEMPLATE_PROFIL");
         f.setAccessible(true);
         String xml = ((MessageFormat) f.get(null)).format(new Object[]{"v", "l", ""});
         assertTrue(xml.contains("\t<name>"),
-            "TEMPLATE_PROFIL (text block) doit indenter <name> avec une tabulation");
+            "TEMPLATE_PROFIL (text block) must indent <name> with a tab character");
     }
 
     @Test
@@ -108,34 +104,34 @@ class ProfileBackupTest {
         f.setAccessible(true);
         String xml = ((MessageFormat) f.get(null)).format(new Object[]{"v", "l", ""});
         assertTrue(xml.contains("\t<language>"),
-            "TEMPLATE_PROFIL (text block) doit indenter <language> avec une tabulation");
+            "TEMPLATE_PROFIL (text block) must indent <language> with a tab character");
     }
 
     @Test
     void testTemplateProfil_rulesIsInlineNotMultiline() throws Exception {
-        // Dans le text block : <rules>{2}</rules> est sur une seule ligne
-        // → après formatage avec contenu vide, la balise ouvrante et fermante sont adjacentes
+        // In the text block: <rules>{2}</rules> is on a single line
+        // → after formatting with empty content, the opening and closing tags are adjacent
         Field f = ProfileBackup.class.getDeclaredField("TEMPLATE_PROFIL");
         f.setAccessible(true);
         String xml = ((MessageFormat) f.get(null)).format(new Object[]{"p", "l", ""});
         assertTrue(xml.contains("<rules></rules>"),
-            "TEMPLATE_PROFIL (text block) doit avoir <rules></rules> inline (pas de saut de ligne entre les balises)");
+            "TEMPLATE_PROFIL (text block) must have <rules></rules> inline (no line break between tags)");
     }
 
     @Test
     void testTemplateProfil_isTextBlock_doesNotUseConcatenation() throws Exception {
-        // Vérifie que le template est bien un text block : il contient des sauts de ligne
-        // (un text block produit toujours un String multi-lignes)
+        // Verifies that the template is indeed a text block: it contains line breaks
+        // (a text block always produces a multi-line String)
         Field f = ProfileBackup.class.getDeclaredField("TEMPLATE_PROFIL");
         f.setAccessible(true);
         MessageFormat mf = (MessageFormat) f.get(null);
         String pattern = mf.toPattern();
         assertTrue(pattern.contains("\n"),
-            "TEMPLATE_PROFIL doit être un text block multi-lignes");
+            "TEMPLATE_PROFIL must be a multi-line text block");
     }
 
     // -----------------------------------------------------------------------
-    // Constante TEMPLATE_RULE — format text block (tabulations, <parameters />)
+    // TEMPLATE_RULE constant — text block format (tabs, <parameters />)
     // -----------------------------------------------------------------------
 
     @Test
@@ -172,34 +168,34 @@ class ProfileBackupTest {
 
     @Test
     void testTemplateRule_containsParametersTagWithSpace() throws Exception {
-        // Le text block utilise "<parameters />" avec un espace avant le slash
+        // The text block uses "<parameters />" with a space before the slash
         Field f = ProfileBackup.class.getDeclaredField("TEMPLATE_RULE");
         f.setAccessible(true);
         String xml = ((MessageFormat) f.get(null)).format(new Object[]{"repo", "key", "CODE_SMELL", "MINOR"});
         assertTrue(xml.contains("<parameters />"),
-            "TEMPLATE_RULE (text block) doit contenir <parameters /> avec un espace avant />");
+            "TEMPLATE_RULE (text block) must contain <parameters /> with a space before />");
     }
 
     @Test
     void testTemplateRule_parametersDoesNotUseCompactForm() throws Exception {
-        // Le text block utilise "<parameters />" et PAS "<parameters/>" (sans espace)
+        // The text block uses "<parameters />" and NOT "<parameters/>" (without space)
         Field f = ProfileBackup.class.getDeclaredField("TEMPLATE_RULE");
         f.setAccessible(true);
         String xml = ((MessageFormat) f.get(null)).format(new Object[]{"repo", "key", "CODE_SMELL", "MINOR"});
-        // On retire d'abord la forme avec espace pour ne tester que la forme compacte
+        // Remove the spaced form first to test only the compact form
         String xmlWithoutSpaced = xml.replace("<parameters />", "");
         assertFalse(xmlWithoutSpaced.contains("<parameters/>"),
-            "TEMPLATE_RULE ne doit pas contenir la forme compacte <parameters/> sans espace");
+            "TEMPLATE_RULE must not contain the compact form <parameters/> without space");
     }
 
     @Test
     void testTemplateRule_repositoryKeyIsIndentedWithTab() throws Exception {
-        // Le text block indente chaque balise enfant de <rule> avec \t
+        // The text block indents each child tag of <rule> with \t
         Field f = ProfileBackup.class.getDeclaredField("TEMPLATE_RULE");
         f.setAccessible(true);
         String xml = ((MessageFormat) f.get(null)).format(new Object[]{"repo", "key", "CODE_SMELL", "MINOR"});
         assertTrue(xml.contains("\t<repositoryKey>"),
-            "TEMPLATE_RULE (text block) doit indenter <repositoryKey> avec une tabulation");
+            "TEMPLATE_RULE (text block) must indent <repositoryKey> with a tab character");
     }
 
     @Test
@@ -208,7 +204,7 @@ class ProfileBackupTest {
         f.setAccessible(true);
         String xml = ((MessageFormat) f.get(null)).format(new Object[]{"repo", "key", "CODE_SMELL", "MINOR"});
         assertTrue(xml.startsWith("<rule>"),
-            "TEMPLATE_RULE (text block) doit commencer par la balise <rule>");
+            "TEMPLATE_RULE (text block) must start with the <rule> tag");
     }
 
     @Test
@@ -218,11 +214,11 @@ class ProfileBackupTest {
         MessageFormat mf = (MessageFormat) f.get(null);
         String pattern = mf.toPattern();
         assertTrue(pattern.contains("\n"),
-            "TEMPLATE_RULE doit être un text block multi-lignes");
+            "TEMPLATE_RULE must be a multi-line text block");
     }
 
     // -----------------------------------------------------------------------
-    // language() et name() — lecture du JSON de profil
+    // language() and name() — reading from profile JSON
     // -----------------------------------------------------------------------
 
     @Test
@@ -249,15 +245,27 @@ class ProfileBackupTest {
 
     @Test
     void testMetadataIsCachedAfterFirstCall() throws IOException {
-        URI profileUri = createProfileJson("cached profile", "java", List.of());
-        ProfileBackup backup = new ProfileBackup(profileUri);
-        // Deux appels doivent retourner la même valeur (cache interne)
-        assertEquals(backup.language(), backup.language());
-        assertEquals(backup.name(),     backup.name());
+        // Write the profile JSON in a file we can delete manually
+        Path jsonFile = tempDir.resolve("cache_first_call.json");
+        Files.writeString(jsonFile,
+            new ObjectMapper().writeValueAsString(new ProfileMetadata("cached profile", "java", List.of())),
+            StandardCharsets.UTF_8);
+        ProfileBackup backup = new ProfileBackup(jsonFile.toUri());
+
+        // Warm up cache
+        assertEquals("cached profile", backup.name());
+        assertEquals("java",           backup.language());
+
+        // Remove the backing file — both accessors must still work via cache
+        Files.delete(jsonFile);
+        assertEquals("cached profile", backup.name(),
+            "name() must hit the cache after the file is deleted");
+        assertEquals("java", backup.language(),
+            "language() must hit the cache after the file is deleted");
     }
 
     // -----------------------------------------------------------------------
-    // Erreur lors du chargement du profil JSON
+    // Error when loading profile JSON
     // -----------------------------------------------------------------------
 
     @Test
@@ -266,7 +274,7 @@ class ProfileBackupTest {
         ProfileBackup backup = new ProfileBackup(invalidUri);
         RuntimeException ex = assertThrows(RuntimeException.class, backup::language);
         assertTrue(ex.getMessage().contains("Unable to load JSON Profile"),
-            "Le message d'erreur doit indiquer 'Unable to load JSON Profile'");
+            "The error message must indicate 'Unable to load JSON Profile'");
     }
 
     @Test
@@ -277,18 +285,18 @@ class ProfileBackupTest {
     }
 
     // -----------------------------------------------------------------------
-    // profileDataUri() — base64 + format data URI
+    // profileDataUri() — base64 + data URI format
     // -----------------------------------------------------------------------
 
     @Test
     void testProfileDataUriIsDataUrl() throws IOException {
-        // Profil sans règle (ruleKeys vide) → xmlProfile() ne cherche pas de ressource classpath
+        // Profile without rules (empty ruleKeys) → xmlProfile() does not look for a classpath resource
         URI profileUri = createProfileJson("test profile", "java", List.of());
         ProfileBackup backup = new ProfileBackup(profileUri);
         URL dataUri = backup.profileDataUri();
         assertNotNull(dataUri);
         assertTrue(dataUri.toString().startsWith("data:text/xml;base64,"),
-            "L'URL doit être au format data URI base64");
+            "The URL must be in base64 data URI format");
     }
 
     @Test
@@ -301,9 +309,9 @@ class ProfileBackupTest {
         String b64   = raw.substring("data:text/xml;base64,".length());
         String xml   = new String(Base64.getDecoder().decode(b64), StandardCharsets.UTF_8);
 
-        assertTrue(xml.contains("<name>decoded profile</name>"), "Le XML décodé doit contenir le nom du profil");
-        assertTrue(xml.contains("<language>js</language>"),      "Le XML décodé doit contenir le langage");
-        assertTrue(xml.contains("<rules>"),                       "Le XML décodé doit contenir la section des règles");
+        assertTrue(xml.contains("<name>decoded profile</name>"), "The decoded XML must contain the profile name");
+        assertTrue(xml.contains("<language>js</language>"),      "The decoded XML must contain the language");
+        assertTrue(xml.contains("<rules>"),                       "The decoded XML must contain the rules section");
     }
 
     @Test
@@ -314,7 +322,7 @@ class ProfileBackupTest {
     }
 
     // -----------------------------------------------------------------------
-    // xmlProfile() + loadRule() — avec de vraies ressources classpath de test
+    // xmlProfile() + loadRule() — with real classpath test resources
     // (src/test/resources/org/green-code-initiative/rules/java/GCI1.json, GCI2.json)
     // -----------------------------------------------------------------------
 
@@ -328,16 +336,16 @@ class ProfileBackupTest {
 
         // repositoryKey = "creedengo-" + language
         assertTrue(xml.contains("<repositoryKey>creedengo-java</repositoryKey>"),
-            "Le XML doit contenir le repositoryKey creedengo-java");
-        // clé de la règle
+            "The XML must contain the repositoryKey creedengo-java");
+        // rule key
         assertTrue(xml.contains("<key>GCI1</key>"),
-            "Le XML doit contenir la clé de règle GCI1");
-        // type issu du fichier JSON
+            "The XML must contain the rule key GCI1");
+        // type from JSON file
         assertTrue(xml.contains("<type>CODE_SMELL</type>"),
-            "Le XML doit contenir le type CODE_SMELL");
-        // sévérité en MAJUSCULES (toUpperCase appliqué sur 'minor')
+            "The XML must contain the type CODE_SMELL");
+        // severity in UPPERCASE (toUpperCase applied on 'minor')
         assertTrue(xml.contains("<priority>MINOR</priority>"),
-            "La sévérité 'minor' doit être convertie en 'MINOR' via toUpperCase()");
+            "The severity 'minor' must be converted to 'MINOR' via toUpperCase()");
     }
 
     @Test
@@ -347,27 +355,27 @@ class ProfileBackupTest {
 
         String xml = decodeDataUri(backup.profileDataUri());
 
-        assertTrue(xml.contains("<key>GCI1</key>"), "Le XML doit contenir GCI1");
-        assertTrue(xml.contains("<key>GCI2</key>"), "Le XML doit contenir GCI2");
-        // GCI2 a type=BUG et severity=major → MAJOR
-        assertTrue(xml.contains("<type>BUG</type>"),        "Le XML doit contenir le type BUG pour GCI2");
-        assertTrue(xml.contains("<priority>MAJOR</priority>"), "La sévérité 'major' doit être MAJOR");
+        assertTrue(xml.contains("<key>GCI1</key>"), "The XML must contain GCI1");
+        assertTrue(xml.contains("<key>GCI2</key>"), "The XML must contain GCI2");
+        // GCI2 has type=BUG and severity=major → MAJOR
+        assertTrue(xml.contains("<type>BUG</type>"),           "The XML must contain the type BUG for GCI2");
+        assertTrue(xml.contains("<priority>MAJOR</priority>"), "The severity 'major' must be MAJOR");
     }
 
     @Test
     void testProfileDataUri_withRule_repositoryKeyUsesPythonLanguage() throws IOException {
-        // python/GCI5.json doit exister dans les ressources de test
+        // python/GCI5.json must exist in the test resources
         URI profileUri = createProfileJson("python profile", "python", List.of("GCI5"));
         ProfileBackup backup = new ProfileBackup(profileUri);
 
         String xml = decodeDataUri(backup.profileDataUri());
 
         assertTrue(xml.contains("<repositoryKey>creedengo-python</repositoryKey>"),
-            "Le repositoryKey doit être creedengo-python pour le langage python");
-        assertTrue(xml.contains("<key>GCI5</key>"), "Le XML doit contenir la clé GCI5");
-        // GCI5 a severity=critical → CRITICAL
+            "The repositoryKey must be creedengo-python for the python language");
+        assertTrue(xml.contains("<key>GCI5</key>"), "The XML must contain the key GCI5");
+        // GCI5 has severity=critical → CRITICAL
         assertTrue(xml.contains("<priority>CRITICAL</priority>"),
-            "La sévérité 'critical' doit être convertie en CRITICAL");
+            "The severity 'critical' must be converted to CRITICAL");
     }
 
     @Test
@@ -377,10 +385,10 @@ class ProfileBackupTest {
 
         String xml = decodeDataUri(backup.profileDataUri());
 
-        assertTrue(xml.contains("<rule>"),  "Le XML doit contenir la balise ouvrante <rule>");
-        assertTrue(xml.contains("</rule>"), "Le XML doit contenir la balise fermante </rule>");
+        assertTrue(xml.contains("<rule>"),  "The XML must contain the opening <rule> tag");
+        assertTrue(xml.contains("</rule>"), "The XML must contain the closing </rule> tag");
         assertTrue(xml.contains("<parameters />"),
-            "Le XML doit contenir la balise <parameters />");
+            "The XML must contain the <parameters /> tag");
     }
 
     @Test
@@ -391,53 +399,80 @@ class ProfileBackupTest {
         String xml = decodeDataUri(backup.profileDataUri());
 
         assertTrue(xml.contains("<name>mon profil java</name>"),
-            "Le XML doit contenir le nom du profil");
+            "The XML must contain the profile name");
         assertTrue(xml.contains("<language>java</language>"),
-            "Le XML doit contenir le langage");
+            "The XML must contain the language");
     }
 
     // -----------------------------------------------------------------------
-    // loadRule() — erreur : ressource classpath introuvable
+    // loadRule() — error: classpath resource not found
     // -----------------------------------------------------------------------
 
     @Test
     void testProfileDataUri_withUnknownRule_throwsRuntimeException() throws IOException {
-        // La règle RULE_INCONNUE n'existe pas dans le classpath
+        // The rule RULE_INCONNUE does not exist in the classpath
         URI profileUri = createProfileJson("bad profile", "java", List.of("RULE_INCONNUE"));
         ProfileBackup backup = new ProfileBackup(profileUri);
         assertThrows(RuntimeException.class, backup::profileDataUri,
-            "loadRule() doit lever une RuntimeException si la ressource JSON de règle est introuvable");
+            "loadRule() must throw a RuntimeException if the rule JSON resource is not found");
     }
 
     // -----------------------------------------------------------------------
-    // Cache de profileMetadata() — branche "profileMetadata != null"
+    // profileMetadata() cache — "profileMetadata != null" branch
+    //
+    // Strategy: delete the JSON file AFTER the first call.
+    // • With the guard (if == null): the 2nd call hits the cache → success.
+    // • Without the guard (mutant):  the 2nd call tries to re-read the deleted
+    //   file → throws RuntimeException → mutant is KILLED.
     // -----------------------------------------------------------------------
 
     @Test
-    void testProfileMetadataCache_secondCallReturnsSameLanguage() throws IOException {
-        URI profileUri = createProfileJson("cached", "java", List.of());
-        ProfileBackup backup = new ProfileBackup(profileUri);
-        // 1er appel : charge et met en cache
-        String first = backup.language();
-        // 2e appel : utilise le cache (branche if == null → false)
-        String second = backup.language();
-        assertEquals(first, second, "Les deux appels doivent retourner la même valeur depuis le cache");
+    void testProfileMetadataCache_secondCallSucceedsAfterFileDeleted() throws IOException {
+        // Write the profile JSON in a file we control (not tempDir auto-cleanup)
+        Path jsonFile = tempDir.resolve("cache_test_profile.json");
+        String json = new ObjectMapper().writeValueAsString(
+            new ProfileMetadata("cached", "java", List.of())
+        );
+        Files.writeString(jsonFile, json, StandardCharsets.UTF_8);
+        ProfileBackup backup = new ProfileBackup(jsonFile.toUri());
+
+        // 1st call: populates the internal cache
+        assertEquals("java", backup.language());
+
+        // Delete the source file — the cache must be sufficient for subsequent calls
+        Files.delete(jsonFile);
+        assertFalse(Files.exists(jsonFile), "The JSON file must no longer exist");
+
+        // 2nd call: must succeed via cache (would throw if the guard is removed)
+        assertEquals("java", backup.language(),
+            "language() must return the cached value even after the JSON file is deleted");
     }
 
     @Test
-    void testProfileMetadataCache_languageThenName_useSameCache() throws IOException {
-        URI profileUri = createProfileJson("profil cache", "js", List.of());
-        ProfileBackup backup = new ProfileBackup(profileUri);
-        // language() charge le cache, name() doit le réutiliser sans relire le fichier
-        assertEquals("js",          backup.language());
-        assertEquals("profil cache", backup.name());
+    void testProfileMetadataCache_nameSucceedsAfterFileDeleted() throws IOException {
+        Path jsonFile = tempDir.resolve("cache_test_name.json");
+        String json = new ObjectMapper().writeValueAsString(
+            new ProfileMetadata("profil cache", "js", List.of())
+        );
+        Files.writeString(jsonFile, json, StandardCharsets.UTF_8);
+        ProfileBackup backup = new ProfileBackup(jsonFile.toUri());
+
+        // Warm up the cache via language()
+        assertEquals("js", backup.language());
+
+        // Delete the source file
+        Files.delete(jsonFile);
+
+        // name() must also succeed via the shared cache
+        assertEquals("profil cache", backup.name(),
+            "name() must return the cached value even after the JSON file is deleted");
     }
 
     // -----------------------------------------------------------------------
-    // Helpers privés du test
+    // Private test helpers
     // -----------------------------------------------------------------------
 
-    /** Décode un data URI base64 en String XML. */
+    /** Decodes a base64 data URI into an XML String. */
     private String decodeDataUri(URL dataUri) {
         String raw = dataUri.toString();
         String b64 = raw.substring("data:text/xml;base64,".length());
@@ -445,7 +480,7 @@ class ProfileBackupTest {
     }
 
     // -----------------------------------------------------------------------
-    // Structure de la classe
+    // Class structure
     // -----------------------------------------------------------------------
 
     @Test
