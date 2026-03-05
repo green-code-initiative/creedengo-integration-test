@@ -7,7 +7,6 @@ import java.net.URL;
 import java.text.MessageFormat;
 import java.util.Base64;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -54,23 +53,25 @@ import static com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKN
  */
 public class ProfileBackup {
 	private static final MessageFormat TEMPLATE_PROFIL = new MessageFormat(
-			"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
-					"<profile>\n" +
-					"    <name>{0}</name>\n" +
-					"    <language>{1}</language>\n" +
-					"    <rules>\n" +
-					"    {2}\n" +
-					"    </rules>\n" +
-					"</profile>\n"
+			"""
+<?xml version="1.0" encoding="UTF-8"?>
+<profile>
+	<name>{0}</name>
+	<language>{1}</language>
+	<rules>{2}</rules>
+</profile>
+					"""
 	);
 	private static final MessageFormat TEMPLATE_RULE = new MessageFormat(
-			"<rule>\n" +
-					"    <repositoryKey>{0}</repositoryKey>\n" +
-					"    <key>{1}</key>\n" +
-					"    <type>{2}</type>\n" +
-					"    <priority>{3}</priority>\n" +
-					"    <parameters />\n" +
-					"</rule>\n"
+			"""
+<rule>
+	<repositoryKey>{0}</repositoryKey>
+	<key>{1}</key>
+	<type>{2}</type>
+	<priority>{3}</priority>
+	<parameters />
+</rule>
+					"""
 	);
 
 	private final ObjectMapper mapper;
@@ -86,11 +87,11 @@ public class ProfileBackup {
 	}
 
 	public String language() {
-		return profileMetadata().getLanguage();
+		return profileMetadata().language();
 	}
 
 	public String name() {
-		return profileMetadata().getName();
+		return profileMetadata().name();
 	}
 
 	private ProfileMetadata profileMetadata() {
@@ -106,33 +107,33 @@ public class ProfileBackup {
 
 	private RuleMetadata loadRule(String language, String ruleKey) {
 		try (InputStream ruleMetadataJsonFile = ClassLoader.getSystemResourceAsStream("org/green-code-initiative/rules/" + language + "/" + ruleKey + ".json")) {
-			RuleMetadata result = mapper.readValue(ruleMetadataJsonFile, RuleMetadata.class);
-			result.setKey(ruleKey);
-			return result;
+			RuleMetadata parsed = mapper.readValue(ruleMetadataJsonFile, RuleMetadata.class);
+			// Le record est immutable : on reconstruit avec la clé issue du nom de fichier
+			return new RuleMetadata(ruleKey, parsed.type(), parsed.defaultSeverity());
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
 	private String xmlProfile() throws IOException {
-		ProfileMetadata profileMetadata = profileMetadata();
-		String language = profileMetadata.getLanguage();
-		List<RuleMetadata> rules = profileMetadata.getRuleKeys().stream()
+		ProfileMetadata profileMetadataLocal = profileMetadata();
+		String language = profileMetadataLocal.language();
+		List<RuleMetadata> rules = profileMetadataLocal.ruleKeys().stream()
 				.map(ruleKey -> this.loadRule(language, ruleKey))
-				.collect(Collectors.toList());
+				.toList();
 		StringBuilder output = new StringBuilder();
-		String repositoryKey = "creedengo-" + profileMetadata.getLanguage();
+		String repositoryKey = "creedengo-" + profileMetadataLocal.language();
 		rules.forEach(rule -> output.append(
 				xmlRule(
 						repositoryKey,
-						rule.getKey(),
-						rule.getType(),
-						rule.getDefaultSeverity().toUpperCase()
+						rule.key(),
+						rule.type(),
+						rule.defaultSeverity().toUpperCase()
 				))
 		);
 		return TEMPLATE_PROFIL.format(new Object[]{
-				profileMetadata.getName(),
-				profileMetadata.getLanguage(),
+				profileMetadataLocal.name(),
+				profileMetadataLocal.language(),
 				output.toString()
 		});
 	}

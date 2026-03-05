@@ -1,12 +1,9 @@
 package org.greencodeinitiative.creedengo.integration.tests.profile;
 
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-@Data
-public class RuleMetadata {
-
-	private String key;
-	private String type;
-	private String defaultSeverity;
-
-}
+public record RuleMetadata(
+		@JsonProperty("key")             String key,
+		@JsonProperty("type")            String type,
+		@JsonProperty("defaultSeverity") String defaultSeverity
+) {}

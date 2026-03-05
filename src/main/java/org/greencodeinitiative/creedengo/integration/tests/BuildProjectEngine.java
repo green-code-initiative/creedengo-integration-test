@@ -23,10 +23,9 @@ import com.sonar.orchestrator.locator.FileLocation;
 import com.sonar.orchestrator.locator.Location;
 import com.sonar.orchestrator.locator.MavenLocation;
 import com.sonar.orchestrator.locator.URLLocation;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.greencodeinitiative.creedengo.integration.tests.profile.ProfileBackup;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.sonarqube.ws.Components;
@@ -45,8 +44,9 @@ import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Slf4j
 public abstract class BuildProjectEngine {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(BuildProjectEngine.class);
 
 	protected static OrchestratorExtension orchestrator;
 	protected static List<ProjectToAnalyze> analyzedProjects;
@@ -144,6 +144,7 @@ public abstract class BuildProjectEngine {
 				// - Run SonarQube Scanner on test project
 				.peek(p -> LOGGER.info("Running SonarQube Scanner on project: {}", p.getPom()))
 				.forEach(orchestrator::executeBuild);
+
 	}
 
 	private static String systemProperty(String propertyName) {
@@ -399,7 +400,6 @@ public abstract class BuildProjectEngine {
 				.build());
 	}
 
-	@Getter
 	protected static class ProjectToAnalyze {
 		private final Path pom;
 		private final String projectKey;
@@ -410,6 +410,18 @@ public abstract class BuildProjectEngine {
 			assertThat(this.pom).isRegularFile();
 			this.projectKey = projectKey;
 			this.projectName = projectName;
+		}
+
+		public Path getPom() {
+			return pom;
+		}
+
+		public String getProjectKey() {
+			return projectKey;
+		}
+
+		public String getProjectName() {
+			return projectName;
 		}
 
 		public MavenBuild createMavenBuild() {
