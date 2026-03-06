@@ -110,7 +110,7 @@
         <!-- Mutation testing -->
         <pitest.version>1.17.3</pitest.version>
         <pitest-junit5-plugin.version>1.2.1</pitest-junit5-plugin.version>
-        <junit.version>5.13.4</junit.version>
+        <junit.version>6.0.3</junit.version>
 
     </properties>
 
