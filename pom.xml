@@ -101,7 +101,7 @@
         <!-- version 6 KO when component integrated and integration test launched -->
         <!-- error : java.lang.NoSuchMethodError: 'java.lang.Object org.apache.commons.lang3.ObjectUtils.getIfNull(java.lang.Object, java.lang.Object)' -->
 <!--        <orchestrator.version>6.1.0.3962</orchestrator.version>-->
-        <orchestrator.version>5.6.2.2625</orchestrator.version>
+        <orchestrator.version>6.3.0.4464</orchestrator.version>
 
         <logback.version>1.5.32</logback.version>
 
