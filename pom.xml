@@ -108,7 +108,7 @@
         <pitest.version>1.25.0</pitest.version>
         <pitest-junit5-plugin.version>1.2.3</pitest-junit5-plugin.version>
 
-        <junit.version>6.0.3</junit.version>
+        <junit.version>6.1.2</junit.version>
 
     </properties>
 
