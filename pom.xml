@@ -94,18 +94,18 @@
 
         <!-- URL of the Maven repository where sonarqube will be downloaded -->
         <test-it.orchestrator.artifactory.url>https://repo1.maven.org/maven2</test-it.orchestrator.artifactory.url>
-        <test-it.sonarqube.version>26.4.0.121862</test-it.sonarqube.version>
+        <test-it.sonarqube.version>26.7.0.124771</test-it.sonarqube.version>
 
         <assertj.version>3.27.7</assertj.version>
 
-        <orchestrator.version>6.3.0.4464</orchestrator.version>
+        <orchestrator.version>6.4.0.4580</orchestrator.version>
 
-        <logback.version>1.5.32</logback.version>
+        <logback.version>1.6.1</logback.version>
 
         <data-url-handler.version>0.0.1</data-url-handler.version>
 
         <!-- Mutation testing -->
-        <pitest.version>1.25.0</pitest.version>
+        <pitest.version>1.25.8</pitest.version>
         <pitest-junit5-plugin.version>1.2.3</pitest-junit5-plugin.version>
 
         <junit.version>6.1.2</junit.version>
