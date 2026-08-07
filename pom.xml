@@ -105,7 +105,7 @@
         <data-url-handler.version>0.0.1</data-url-handler.version>
 
         <!-- Mutation testing -->
-        <pitest.version>1.25.0</pitest.version>
+        <pitest.version>1.25.8</pitest.version>
         <pitest-junit5-plugin.version>1.2.3</pitest-junit5-plugin.version>
 
         <junit.version>6.0.3</junit.version>
