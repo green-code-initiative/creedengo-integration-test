@@ -98,9 +98,6 @@
 
         <assertj.version>3.27.7</assertj.version>
 
-        <!-- version 6 KO when component integrated and integration test launched -->
-        <!-- error : java.lang.NoSuchMethodError: 'java.lang.Object org.apache.commons.lang3.ObjectUtils.getIfNull(java.lang.Object, java.lang.Object)' -->
-<!--        <orchestrator.version>6.1.0.3962</orchestrator.version>-->
         <orchestrator.version>6.3.0.4464</orchestrator.version>
 
         <logback.version>1.5.32</logback.version>
@@ -111,35 +108,9 @@
         <pitest.version>1.25.0</pitest.version>
         <pitest-junit5-plugin.version>1.2.3</pitest-junit5-plugin.version>
 
-        <junit.version>5.13.4</junit.version>
+        <junit.version>6.0.3</junit.version>
 
     </properties>
-
-    <dependencyManagement>
-        <dependencies>
-            <!-- Align JUnit Platform versions to avoid conflicts with PITest -->
-            <dependency>
-                <groupId>org.junit.platform</groupId>
-                <artifactId>junit-platform-launcher</artifactId>
-                <version>6.0.3</version>
-            </dependency>
-            <dependency>
-                <groupId>org.junit.platform</groupId>
-                <artifactId>junit-platform-engine</artifactId>
-                <version>1.13.4</version>
-            </dependency>
-            <dependency>
-                <groupId>org.junit.jupiter</groupId>
-                <artifactId>junit-jupiter-engine</artifactId>
-                <version>${junit.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.junit.jupiter</groupId>
-                <artifactId>junit-jupiter-api</artifactId>
-                <version>${junit.version}</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
     <dependencies>
 
@@ -176,6 +147,7 @@
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
             <scope>test</scope>
+            <version>${junit.version}</version>
         </dependency>
 
     </dependencies>
@@ -199,25 +171,6 @@
                                 <groupId>org.pitest</groupId>
                                 <artifactId>pitest-junit5-plugin</artifactId>
                                 <version>${pitest-junit5-plugin.version}</version>
-                                <exclusions>
-                                    <!-- Exclude the launcher bundled by the plugin to use the project's one -->
-                                    <exclusion>
-                                        <groupId>org.junit.platform</groupId>
-                                        <artifactId>junit-platform-launcher</artifactId>
-                                    </exclusion>
-                                </exclusions>
-                            </dependency>
-                            <!-- Provide the correct TestEngine to the PITest minion -->
-                            <dependency>
-                                <groupId>org.junit.jupiter</groupId>
-                                <artifactId>junit-jupiter-engine</artifactId>
-                                <version>${junit.version}</version>
-                            </dependency>
-                            <!-- Launcher aligned with the project version -->
-                            <dependency>
-                                <groupId>org.junit.platform</groupId>
-                                <artifactId>junit-platform-launcher</artifactId>
-                                <version>6.0.3</version>
                             </dependency>
                         </dependencies>
                         <configuration>
