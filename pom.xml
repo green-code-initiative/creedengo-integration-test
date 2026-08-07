@@ -98,9 +98,9 @@
 
         <assertj.version>3.27.7</assertj.version>
 
-        <orchestrator.version>6.3.0.4464</orchestrator.version>
+        <orchestrator.version>6.4.0.4580</orchestrator.version>
 
-        <logback.version>1.5.32</logback.version>
+        <logback.version>1.6.1</logback.version>
 
         <data-url-handler.version>0.0.1</data-url-handler.version>
 
