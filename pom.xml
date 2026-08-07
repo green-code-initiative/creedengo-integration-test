@@ -94,22 +94,23 @@
 
         <!-- URL of the Maven repository where sonarqube will be downloaded -->
         <test-it.orchestrator.artifactory.url>https://repo1.maven.org/maven2</test-it.orchestrator.artifactory.url>
-        <test-it.sonarqube.version>26.2.0.119303</test-it.sonarqube.version>
+        <test-it.sonarqube.version>26.4.0.121862</test-it.sonarqube.version>
 
         <assertj.version>3.27.7</assertj.version>
 
         <!-- version 6 KO when component integrated and integration test launched -->
         <!-- error : java.lang.NoSuchMethodError: 'java.lang.Object org.apache.commons.lang3.ObjectUtils.getIfNull(java.lang.Object, java.lang.Object)' -->
 <!--        <orchestrator.version>6.1.0.3962</orchestrator.version>-->
-        <orchestrator.version>5.6.2.2625</orchestrator.version>
+        <orchestrator.version>6.3.0.4464</orchestrator.version>
 
         <logback.version>1.5.32</logback.version>
 
         <data-url-handler.version>0.0.1</data-url-handler.version>
 
         <!-- Mutation testing -->
-        <pitest.version>1.17.3</pitest.version>
-        <pitest-junit5-plugin.version>1.2.1</pitest-junit5-plugin.version>
+        <pitest.version>1.25.0</pitest.version>
+        <pitest-junit5-plugin.version>1.2.3</pitest-junit5-plugin.version>
+
         <junit.version>6.0.3</junit.version>
 
     </properties>
@@ -120,7 +121,7 @@
             <dependency>
                 <groupId>org.junit.platform</groupId>
                 <artifactId>junit-platform-launcher</artifactId>
-                <version>1.13.4</version>
+                <version>6.0.3</version>
             </dependency>
             <dependency>
                 <groupId>org.junit.platform</groupId>
@@ -216,7 +217,7 @@
                             <dependency>
                                 <groupId>org.junit.platform</groupId>
                                 <artifactId>junit-platform-launcher</artifactId>
-                                <version>1.13.4</version>
+                                <version>6.0.3</version>
                             </dependency>
                         </dependencies>
                         <configuration>
@@ -326,7 +327,7 @@
                     <plugin>
                         <groupId>org.sonatype.central</groupId>
                         <artifactId>central-publishing-maven-plugin</artifactId>
-                        <version>0.10.0</version>
+                        <version>0.11.0</version>
                         <extensions>true</extensions>
                         <configuration>
                             <publishingServerId>central</publishingServerId>

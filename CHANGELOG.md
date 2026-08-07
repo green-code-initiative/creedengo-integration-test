@@ -13,6 +13,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Deleted
 
+## [0.4.0] - 2026-05-20
+
+### Changed
+
+- upgrade internal libraries
+- correction of test assertion system
+
 ## [0.3.0] - 2026-03-05
 
 ### Changed
@@ -53,7 +60,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Comparison List
 
-[unreleased](https://github.com/green-code-initiative/creedengo-python/compare/0.3.0...HEAD)
+[unreleased](https://github.com/green-code-initiative/creedengo-python/compare/0.4.0...HEAD)
+[0.4.0](https://github.com/green-code-initiative/creedengo-python/compare/0.3.0...0.4.0)
 [0.3.0](https://github.com/green-code-initiative/creedengo-python/compare/0.2.4...0.3.0)
 [0.2.4](https://github.com/green-code-initiative/creedengo-python/compare/0.2.3...0.2.4)
 [0.2.3](https://github.com/green-code-initiative/creedengo-python/compare/0.2.2...0.2.3)
