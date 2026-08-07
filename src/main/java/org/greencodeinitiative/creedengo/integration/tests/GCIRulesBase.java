@@ -83,11 +83,11 @@ public class GCIRulesBase extends BuildProjectEngine {
         }
 
         assertThat(issues)
-                .hasSizeGreaterThanOrEqualTo(startLines.length)
-//                .hasSize(lines.length)
+                // .hasSizeGreaterThanOrEqualTo(startLines.length)
+                .hasSize(startLines.length)
                 .extracting(EXTRACT_FIELDS)
-                .containsAll(expectedTuples);
-//                .containsExactlyElementsOf(expectedTuples);
+                // .containsAll(expectedTuples);
+                .containsExactlyElementsOf(expectedTuples);
     }
 
 }
