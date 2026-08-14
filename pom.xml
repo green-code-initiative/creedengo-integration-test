@@ -100,7 +100,7 @@
 
         <orchestrator.version>6.4.0.4580</orchestrator.version>
 
-        <logback.version>1.6.1</logback.version>
+        <logback.version>1.6.2</logback.version>
 
         <data-url-handler.version>0.0.1</data-url-handler.version>
 
