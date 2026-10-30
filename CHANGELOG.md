@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- [green-code-initiative/creedengo-java#234](https://github.com/green-code-initiative/creedengo-java/pull/234) Align Maven CI with the checked-in wrapper for builds and dependency submission.
 - update internal librairies versions
 
 ### Deleted
