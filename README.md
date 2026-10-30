@@ -12,6 +12,24 @@ It will be used inside Creedengo plugins to check Integration tests.
 |-------------------|--------------|
 | 0.+               | 17           |
 
+Building this library
+------------------
+
+Use the checked-in Maven Wrapper (Maven 3.9.9) with JDK 17:
+
+```bash
+./mvnw -B verify
+```
+
+CI also adds the exact Maven distribution selected by `./mvnw -B -v` to `PATH`,
+so tools invoking `mvn` use the same version. Publishing already uses `./mvnw`.
+The explicit [dependency submission workflow](.github/workflows/dependency-submission.yml)
+uses this baseline too. After enabling that workflow, a repository administrator
+must keep **Settings > Advanced Security > Dependency graph** enabled and disable
+**Automatic dependency submission** to avoid a second submission using runner Maven.
+See [TECH_DEBT.md](TECH_DEBT.md#td-1---consistent-maven-selection-in-ci) for the
+Maven 3.10 / `MessageUtils` background, the existing extension 9.12.2 fix, and cleanup criteria.
+
 🚀 What does this component do ?
 ------------------
 
@@ -108,6 +126,21 @@ This project should be placed in the `src/it/test-projects` directory of your Cr
 this project should be a standard Maven project with a `pom.xml` file.
 You can create a simple project with some source files that will be analyzed by the Creedengo plugin.
 Make sure to include code that will trigger the rules you want to test in your integration tests.
+
+If a nested test project must not inherit the plugin repository's Maven extensions,
+add a `.mvn/maven.config` file inside that test project containing only comments:
+
+```text
+# Give this test project its own Maven root instead of inheriting repository extensions.
+# This also avoids loading extensions affected by the Maven 3.10 MessageUtils change.
+# See creedengo-integration-test/TECH_DEBT.md (TD-1) for background and cleanup criteria.
+```
+
+Maven 3.9.9 accepts these comments. Ensure the consuming repository's `.gitignore`
+does not hide the file. This library has no nested Maven test projects, so no such
+file is needed here. `BuildProjectEngine` continues to use Orchestrator's Maven
+selection; consumers must provide a compatible `mvn` on `PATH` (for example, their
+wrapper's Maven) rather than expecting this library to choose a distribution.
 
 
 STEP4: Create the integration test class
